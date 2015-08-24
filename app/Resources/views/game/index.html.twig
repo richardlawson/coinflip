@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	{% if games %}
+		<table>
+		<tr>
+			<th>name</th>
+			<th>no players</th>
+			<th>state</th>
+		<tr>
+		{% for game in games %}
+			<tr>
+				<td>{{game.name}}</td>
+				<td>{{game.getPlayerCount()}}</td>
+				<td>{{game.gameState}}</td>
+			</tr>
+	 	{% endfor %}
+	 	</table>
+	{% endif %}
+{% endblock %}
+
+
