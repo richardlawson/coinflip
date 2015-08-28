@@ -11,11 +11,10 @@
 			<th>view</th>
 		<tr>
 		{% for game in games %}
-			<tr>
-				<td>{{game.name}}</td>
-				<td>{{game.getPlayerCount()}}</td>
-				<td>{{game.gameState}}</td>
-				<td>{{game.gameState}}</td>
+			<tr id="game-{{game.id}}">
+				<td class="game-name">{{game.name}}</td>
+				<td class="game-player-count">{{game.getPlayerCount()}}</td>
+				<td class="game-state">{{game.gameState}}</td>
 				<td><a href="{{ path('game_view', { id: game.id }) }}">Register</a></td>
 			</tr>
 	 	{% endfor %}
@@ -24,11 +23,46 @@
 {% endblock %}
 {% block javascripts %}
  	 {{ parent() }}
- 	 <script>
- 	 	{% for game in unviewedGames %}	
+	 <script src="http://autobahn.s3.amazonaws.com/js/autobahn.min.js"></script>
+	 <script>
+	 	var unviewedGames = [];
+	 	var FINISHED_GAME = 2;
+	 	{% for game in unviewedGames %}	
+	 		unviewedGames.push({{game.id}});
+	 	{% endfor %}
+	 	
+	    var conn = new ab.Session('ws://localhost:8080',
+	        function() {
+	            conn.subscribe('games', function(topic, data) {
+	            	// our json is actually a json string, so make it a json object
+	            	var game = jQuery.parseJSON(data);
+	                refreshGameRow(game);
+	                showMyGame(game);
+	            });
+	        },
+	        function() {
+	            console.warn('WebSocket connection closed');
+	        },
+	        {'skipSubprotocolCheck': true}
+	    );
+	    
+	    function refreshGameRow(game){
+	    	$("#game-" + game.id ).find('td.game-name').text(game.name);
+	    	$("#game-" + game.id ).find('td.game-player-count').text(game.noPlayers);
+	    	$("#game-" + game.id ).find('td.game-state').text(game.state);
+	    }
+	    
+	    function showMyGame(game){
+	    	if(game.state == FINISHED_GAME && $.inArray(game.id, unviewedGames)){
+	    		window.open('/secure/game-play/' + game.id);
+	    	}
+	    }
+	</script>
+	<script>
+ 		{% for game in unviewedGames %}	
  	 		window.open('{{ path('game_play', { id: game.id }) }}');
  	 	{% endfor %}
-	 </script>	
+	</script>	
 {% endblock %}
 
 

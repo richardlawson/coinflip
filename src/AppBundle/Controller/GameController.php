@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\Game;
 use AppBundle\Entity\Player;
 use AppBundle\Entity\User;
+use AppBundle\Entity\GameJsonEncoder;
 use Doctrine\ORM\EntityManager;
 use AppBundle\Entity\RandomHeadTailsGenerator;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +23,6 @@ class GameController extends Controller
      */
     public function indexAction()
     {
-    	$this->setUpPageRefresh();
     	$em = $this->getDoctrine()->getManager();
     	$games = $em->getRepository('AppBundle:Game')->findAll();
     	$unviewedGames = $em->getRepository('AppBundle:Game')->getFinishedGamesThatUserHasNotViewed($this->getUser());
@@ -56,9 +56,11 @@ class GameController extends Controller
     			$game->setRandomGenerator(new RandomHeadTailsGenerator());
     			$game->playGame();
     			$em->flush();
+    			$this->notifyPlayersOfGameUpdate($game);
     			return $this->redirectToRoute('game_play', array('id' => $game->getId()), 301);
     		}
     		$em->flush();
+    		$this->notifyPlayersOfGameUpdate($game);
     	}
     	
     	$userInGame = $game->isUserInGame($user);
@@ -114,6 +116,15 @@ class GameController extends Controller
     	$player->setGame($game);
     	$game->addPlayer($player);
     	$em->persist($player);
+	}
+	
+	protected function notifyPlayersOfGameUpdate(Game $game){
+		$encoder = new GameJsonEncoder($game);
+		$jsonGame = $encoder->getLiteObject();
+		$context = new \ZMQContext();
+		$socket = $context->getSocket(\ZMQ::SOCKET_PUSH, 'game pusher');
+		$socket->connect("tcp://localhost:5555");
+		$socket->send($jsonGame);
 	}
 	
 	 /**
