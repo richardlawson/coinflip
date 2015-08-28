@@ -7,6 +7,7 @@ use AppBundle\Entity\Player;
 use AppBundle\Entity\FlipTypeAlreadySelectedException;
 use AppBundle\Entity\RandomHeadTailsGenerator;
 use AppBundle\Entity\NotEnoughPlayersException;
+use AppBundle\Entity\PlayerAlreadyAddedException;
 
 class GameTest extends \PHPUnit_Framework_TestCase{
 	
@@ -17,9 +18,14 @@ class GameTest extends \PHPUnit_Framework_TestCase{
 	public function setUp(){
 		$this->game = new Game(new RandomHeadTailsGenerator());
 		$this->user1 = new User();
+		$this->user1->setId(1);
 		$this->user1->setUsername('ricardo75');
 		$this->user2 = new User();
+		$this->user2->setId(2);
 		$this->user2->setUsername('coolcat');
+		$this->user3 = new User();
+		$this->user3->setId(3);
+		$this->user2->setUsername('flipshark');
 	}
 	
 	public function testGameObjectCreated(){
@@ -138,6 +144,80 @@ class GameTest extends \PHPUnit_Framework_TestCase{
 		$this->game->setRandomGenerator($generatorStub);
 		$winner = $this->game->playGame();
 		$this->assertEquals(Game::STATE_FINISHED, $this->game->getGameState());
+	}
+	
+	/**
+	 * @expectedException AppBundle\Entity\TooManyPlayersException
+	 */
+	public function testCantAddMoreThenTwoPlayers(){
+		$player1 = new Player($this->user1, Game::FLIP_TYPE_TAILS);
+		$this->game->addPlayer($player1);
+		$player2 = new Player($this->user2, Game::FLIP_TYPE_HEADS);
+		$this->game->addPlayer($player2);
+		$player3 = new Player($this->user3, Game::FLIP_TYPE_HEADS);
+		$this->game->addPlayer($player3);
+	}
+	
+	/**
+	 * @expectedException AppBundle\Entity\PlayerAlreadyAddedException
+	 */
+	public function testCantAddPlayerToGameMoreThanOnce(){
+		$player1 = new Player($this->user1, Game::FLIP_TYPE_TAILS);
+		$this->game->addPlayer($player1);
+		$this->game->addPlayer($player1);
+	}
+	
+	public function testIsUserInGame(){
+		$player1 = new Player($this->user1, Game::FLIP_TYPE_TAILS);
+		$this->game->addPlayer($player1);
+		$this->assertTrue($this->game->isUserInGame($this->user1));
+	}
+	
+	/**
+	 * @expectedException AppBundle\Entity\InvalidFlipTypeException
+	 */
+	public function testExceptionThrownWhenFlipTypeNotVaild(){
+		$invalidFlipType = 3;
+		Game::getFlipTypeAsString($invalidFlipType);
+	}
+	
+	public function testGetFlipTypeAsStringReturnsHeadsStringForHeadsFlipType(){
+		$expected = 'heads';
+		$this->assertEquals($expected, Game::getFlipTypeAsString(Game::FLIP_TYPE_HEADS));
+	}
+	
+	public function testGetFlipTypeAsStringReturnsTailsStringForTailsFlipType(){
+		$expected = 'tails';
+		$this->assertEquals($expected, Game::getFlipTypeAsString(Game::FLIP_TYPE_TAILS));
+	}
+	
+	public function testIsValidFlipTypeReturnsTrueForValidFlipTypes(){
+		$this->assertTrue(Game::isValidFlipType(Game::FLIP_TYPE_HEADS));
+		$this->assertTrue(Game::isValidFlipType(Game::FLIP_TYPE_TAILS));
+	}
+	
+	public function testIsValidFlipTypeReturnsFalseForInvalidFlipTypes(){
+		$invalidType1 = 0;
+		$invalidType2 = 3;
+		$this->assertFalse(Game::isValidFlipType($invalidType1));
+		$this->assertFalse(Game::isValidFlipType($invalidType2));
+	}
+	
+	public function testGetPlayerByUserId(){
+		$player1 = new Player($this->user1, Game::FLIP_TYPE_HEADS);
+		$this->game->addPlayer($player1);
+		$this->assertEquals($player1, $this->game->getPlayerByUserId($this->user1->getId()));
+		$player2 = new Player($this->user2, Game::FLIP_TYPE_TAILS);
+		$this->game->addPlayer($player2);
+		$this->assertEquals($player2, $this->game->getPlayerByUserId($this->user2->getId()));
+	}
+	
+	/**
+	 * @expectedException AppBundle\Entity\UserNotInGameException
+	 */
+	public function testGetPlayerByUserIdThrowsExceptionForUserNotInGame(){
+		$idOfUserNotInGame = 5;
+		$player = $this->game->getPlayerByUserId($idOfUserNotInGame);
 	}
 
 }

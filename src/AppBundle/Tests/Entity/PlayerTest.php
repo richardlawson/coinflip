@@ -33,6 +33,20 @@ class PlayerTest extends \PHPUnit_Framework_TestCase{
 	public function testExceptionThrownWhenFlipTypeNotVaild(){
 		$invalidFlipType = 3;
 		$player1 = new Player($this->user1, $invalidFlipType);
+		$invalidFlipType = 0;
+		$player1 = new Player($this->user1, $invalidFlipType);
+	}
+	
+	public function testGetFlipTypeAsStringReturnsHeadsStringForHeadsFlipType(){
+		$expected = 'heads';
+		$player1 = new Player($this->user1, Game::FLIP_TYPE_HEADS);
+		$this->assertEquals($expected, $player1->getFlipTypeAsString());
+	}
+	
+	public function testGetFlipTypeAsStringReturnsTailsStringForTailsFlipType(){
+		$expected = 'tails';
+		$player1 = new Player($this->user1, Game::FLIP_TYPE_TAILS);
+		$this->assertEquals($expected, $player1->getFlipTypeAsString());
 	}
 
 }

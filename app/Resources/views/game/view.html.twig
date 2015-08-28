@@ -2,6 +2,24 @@
 
 {% block body %}
 	<h1>{{game.name}}</h1>
+	<p>Players:</p>
+	{% if game.players %}
+		{% for player in game.players %}
+			{{ player.user.username }} {{ player.getFlipTypeAsString }}<br>
+		{% endfor %}
+	{% endif %}
+	{% if gameFinished %}
+		<h2>The winner was {{ game.winner.user.username }} with {{ game.winner.flipTypeAsString }}</h2>
+	{% else %}
+		{% if not userInGame %}
+			<p>Pick a flip type</p>
+			{% if not game.isFlipTypeInUse(constant('FLIP_TYPE_HEADS', game)) %}
+				{{ form(formHeads) }}
+			{% endif %}
+			{% if not game.isFlipTypeInUse(constant('FLIP_TYPE_TAILS', game)) %}
+				{{ form(formTails) }}
+			{% endif %}
+		{% endif %}
+	{% endif %}
 {% endblock %}
-
 

@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<h1>{{game.name}}</h1>
+	<p>Players:</p>
+	{% if game.players %}
+		{% for player in game.players %}
+			{{ player.user.username }} {{ player.flipTypeAsString }} <br>
+		{% endfor %}
+	{% endif %}
+	<h2 id="progress-bar">Game in progress:</h2>
+	<div id="animation">
+		<p id="coin-heads">HEADS</p>
+		<p id="coin-tails">TAILS</p>
+	<div>
+	<div id="winner-panel" style="display:none">
+		<h2>Winner:</h2>
+		{{ game.winner.user.username }} with {{ game.winner.flipTypeAsString }} 
+	</div>
+{% endblock %}
+
+ {% block javascripts %}
+ 	 {{ parent() }}
+ 	 <script>
+		$(document).ready(function(){
+		   $("#coin-heads").show();
+		   $("#coin-tails").hide();
+		}); 
+		
+		var tid = setInterval(doCoinAnimation, 1000);
+		var count = 0;
+		var maxFlips = 10;
+		function doCoinAnimation() {
+			$("#coin-heads").toggle();
+		   	$("#coin-tails").toggle();
+		   	count++;
+		   	if(count == maxFlips){
+		   		endAnimationAndShowWinner();
+		   	}
+		}
+		
+		function endAnimationAndShowWinner(){
+		  clearInterval(tid);
+		  {% if(game.winner.flipType == constant('FLIP_TYPE_HEADS', game))%}
+		  	$("#coin-heads").show();
+		  	$("#coin-tails").hide();
+		  {% else %}
+		  	$("#coin-heads").hide();
+		  	$("#coin-tails").show();
+		  {% endif %}
+		  $("#progress-bar").text('Game Finished');;
+		  $("#winner-panel").show();
+		}
+	</script>
+ {% endblock %}
+
+

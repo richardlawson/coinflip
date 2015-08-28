@@ -16,7 +16,7 @@ class Player{
 	protected $id;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Game", inversedBy="products")
+	 * @ORM\ManyToOne(targetEntity="Game", inversedBy="players")
 	 * @ORM\JoinColumn(name="game_id", referencedColumnName="id")
 	 */
 	protected $game;
@@ -32,8 +32,14 @@ class Player{
 	 */
 	protected $flipType;
 	
-	public function __construct(User $user, $flipType){
-		if(!$this->isValidFlipType($flipType)){
+	/**
+	 * @ORM\Column(type="boolean")
+	 */
+	protected $viewedGame = false;
+	
+	public function __construct(User $user, $flipType)
+	{
+		if(!Game::isValidFlipType($flipType)){
 			throw new InvalidFlipTypeException();
 		}
 		$this->user = $user;
@@ -41,21 +47,12 @@ class Player{
 	}
 	
 	/**
-	 * Is valid flip type
-	 *
-	 * @param integer $flipType
-	 * @return boolean
-	 */
-	protected function isValidFlipType($flipType){
-		return in_array($flipType, Game::getFlipTypes());
-	}
-	
-	/**
      * Get user
      *
      * @return User
      */
-	public function getUser(){
+	public function getUser()
+	{
 		return $this->user;
 	}
 	
@@ -64,8 +61,19 @@ class Player{
 	 *
 	 * @return integer
 	 */
-	public function getFlipType(){
+	public function getFlipType()
+	{
 		return $this->flipType;
+	}
+	
+	/**
+	 * Get fliptype as string
+	 *
+	 * @return string
+	 */
+	public function getFlipTypeAsString()
+	{
+		return Game::getFlipTypeAsString($this->flipType);
 	}
 
     /**
@@ -90,4 +98,39 @@ class Player{
     {
         return $this->game;
     }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+
+    /**
+     * Set viewedGame
+     *
+     * @param boolean $viewedGame
+     * @return Player
+     */
+    public function setViewedGame($viewedGame)
+    {
+        $this->viewedGame = $viewedGame;
+
+        return $this;
+    }
+
+    /**
+     * Get viewedGame
+     *
+     * @return boolean 
+     */
+    public function getViewedGame()
+    {
+        return $this->viewedGame;
+    }
+
 }

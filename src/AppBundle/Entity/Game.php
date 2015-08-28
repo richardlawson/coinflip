@@ -4,13 +4,16 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\GameRepository")
  * @ORM\Table(name="games")
  */
 class Game{
 	const FLIP_TYPE_HEADS = 1;
 	const FLIP_TYPE_TAILS = 2;
+	const FLIP_TYPE_HEADS_STRING = 'heads';
+	const FLIP_TYPE_TAILS_STRING = 'tails';
 	const PLAYERS_NEEDED = 2;
+	const MAX_PLAYERS = 2;
 	const STATE_INITIALIZED = 1;
 	const STATE_FINISHED = 2;
 
@@ -46,7 +49,8 @@ class Game{
 	 **/
 	protected $winner;
 	
-	public function __construct(RandomHeadTailsGenerator $generator){
+	public function __construct(RandomHeadTailsGenerator $generator)
+	{
 		$this->generator = $generator;
 		$this->players = new ArrayCollection();
 	}
@@ -56,7 +60,8 @@ class Game{
 	 *
 	 * @param RandomHeadTailsGenerator $generator
 	 */
-	public function setRandomGenerator(RandomHeadTailsGenerator $generator){
+	public function setRandomGenerator(RandomHeadTailsGenerator $generator)
+	{
 		$this->generator = $generator;
 	}
 	
@@ -65,7 +70,8 @@ class Game{
 	 *
 	 * @return Player
 	 */
-	public function playGame(){
+	public function playGame()
+	{
 		if(!$this->isGameReady()){
 			throw new NotEnoughPlayersException();
 		}
@@ -85,7 +91,8 @@ class Game{
 	 *
 	 * @return boolean
 	 */
-	public function isGameReady(){
+	public function isGameReady()
+	{
 		return ($this->getPlayerCount() == self::PLAYERS_NEEDED);
 	}
 	
@@ -94,7 +101,8 @@ class Game{
 	 *
 	 * @return integer
 	 */
-	protected function doRandomFlip(){
+	protected function doRandomFlip()
+	{
 		return $this->generator->doRandomFlip();
 	}
 	
@@ -104,7 +112,8 @@ class Game{
 	 * @param int $flipType
 	 * @return boolean
 	 */
-	public function isFlipTypeInUse($flipType){
+	public function isFlipTypeInUse($flipType)
+	{
 		$inUse = false;
 		foreach($this->players as $player){
 			if($flipType == $player->getFlipType()){
@@ -120,11 +129,52 @@ class Game{
 	 *
 	 * @param Player $player
 	 */
-	public function addPlayer(Player $player){
+	public function addPlayer(Player $player)
+	{
+		if($this->playerAlreadyAdded($player)){
+			throw new PlayerAlreadyAddedException();
+		}
+		if($this->getPlayerCount() == self::MAX_PLAYERS){
+			throw new TooManyPlayersException();
+		}
 		if($this->isFlipTypeInUse($player->getFlipType())){
 			throw new FlipTypeAlreadySelectedException();
 		}
 		$this->players[] = $player;
+	}
+	
+	/**
+	 * Player already added
+	 *
+	 * @param Player $player
+	 * @return boolean
+	 */
+	public function playerAlreadyAdded(Player $player){
+		return in_array($player->getUser()->getId(), $this->getUserIds());
+	}
+	
+	/**
+	 * Is user in game
+	 *
+	 * @param User $user
+	 * @return boolean
+	 */
+	public function isUserInGame(User $user){
+		return in_array($user->getId(), $this->getUserIds());
+	}
+	
+	/**
+	 * Gets user ids of players
+	 *
+	 * @param User $user
+	 * @return array
+	 */
+	protected function getUserIds(){
+		$userIds = [];
+		foreach($this->players as $existingPlayer){
+			$userIds[] = $existingPlayer->getUser()->getId();
+		}
+		return $userIds;
 	}
 
     /**
@@ -135,6 +185,16 @@ class Game{
     public function removePlayer(\AppBundle\Entity\Player $player)
     {
         $this->players->removeElement($player);
+    }
+    
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+    	return $this->id;
     }
 
     /**
@@ -152,8 +212,26 @@ class Game{
      *
      * @return integer
      */
-    public function getPlayerCount(){
+    public function getPlayerCount()
+    {
     	return count($this->players);
+    }
+    
+    /**
+     * Get player 
+     * 
+     * @param integer $id
+     * @return Player
+     */
+    public function getPlayerByUserId($userId)
+    {
+    	foreach($this->players as $player){
+			if($player->getUser()->getId() == $userId){
+				return $player;
+			}
+		}
+		// if we get to this point caller must have passed an id of a user who is not in game
+    	throw new UserNotInGameException();
     }
 
 
@@ -191,19 +269,6 @@ class Game{
     }
 
     /**
-     * Set gameState
-     *
-     * @param integer $gameState
-     * @return Game
-     */
-    public function setGameState($gameState)
-    {
-        $this->gameState = $gameState;
-
-        return $this;
-    }
-
-    /**
      * Get winner
      *
      * @return \AppBundle\Entity\Player 
@@ -218,7 +283,38 @@ class Game{
      *
      * @return array
      */
-    public static function getFlipTypes(){
+    public static function getFlipTypes()
+    {
     	return self::$flipTypes;
+    }
+    
+    
+    /**
+     * Is valid flip type
+     *
+     * @param integer $flipType
+     * @return boolean
+     */
+    public static function isValidFlipType($flipType)
+    {
+    	return in_array($flipType, self::getFlipTypes());
+    }
+    
+    /**
+     * Get fliptype as string
+     * 
+     * @param integer $flipType;
+     * @return string
+     */
+    public static function getFlipTypeAsString($flipType)
+    {
+    	if(!self::isValidFlipType($flipType)){
+    		throw new InvalidFlipTypeException();
+    	}
+    	if($flipType == self::FLIP_TYPE_HEADS){
+    		return self::FLIP_TYPE_HEADS_STRING;
+    	}else{
+    		return self::FLIP_TYPE_TAILS_STRING;
+    	}
     }
 }

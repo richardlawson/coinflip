@@ -1,22 +1,35 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+	<h1>Games Home</h1>
 	{% if games %}
 		<table>
 		<tr>
 			<th>name</th>
 			<th>no players</th>
 			<th>state</th>
+			<th>view</th>
 		<tr>
 		{% for game in games %}
 			<tr>
 				<td>{{game.name}}</td>
 				<td>{{game.getPlayerCount()}}</td>
 				<td>{{game.gameState}}</td>
+				<td>{{game.gameState}}</td>
+				<td><a href="{{ path('game_view', { id: game.id }) }}">Register</a></td>
 			</tr>
 	 	{% endfor %}
 	 	</table>
 	{% endif %}
 {% endblock %}
+{% block javascripts %}
+ 	 {{ parent() }}
+ 	 <script>
+ 	 	{% for game in unviewedGames %}	
+ 	 		window.open('{{ path('game_play', { id: game.id }) }}');
+ 	 	{% endfor %}
+	 </script>	
+{% endblock %}
+
 
 
