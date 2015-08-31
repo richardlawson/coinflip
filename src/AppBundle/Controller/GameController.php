@@ -26,9 +26,11 @@ class GameController extends Controller
     	$em = $this->getDoctrine()->getManager();
     	$games = $em->getRepository('AppBundle:Game')->findAll();
     	$unviewedGames = $em->getRepository('AppBundle:Game')->getFinishedGamesThatUserHasNotViewed($this->getUser());
+    	$liveGames = $em->getRepository('AppBundle:Game')->getUserLiveGames($this->getUser());
         return $this->render('game/index.html.twig', array(
             'games' => $games,
         	'unviewedGames'	=> $unviewedGames,
+            'liveGames'	=> $liveGames,
         ));
     }
     
@@ -48,7 +50,6 @@ class GameController extends Controller
     	$user = $this->getUser();
     	
     	if($request->isMethod('POST')){
-    		$form = $headsForm;
     		$flipType = $this->getFlipTypeFromForm($headsForm, $tailsForm, $request);
     		$em = $this->getDoctrine()->getManager();
     		$this->createPlayerAddToGameAndPersist($user, $game, $flipType, $em);
@@ -113,8 +114,8 @@ class GameController extends Controller
 	
 	protected function createPlayerAddToGameAndPersist(User $user, Game $game, $flipType, EntityManager $em){
 		$player = new Player($user, $flipType);
+		// this method sets the players game and also adds the player to the game
     	$player->setGame($game);
-    	$game->addPlayer($player);
     	$em->persist($player);
 	}
 	

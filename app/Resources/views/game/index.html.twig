@@ -25,10 +25,10 @@
  	 {{ parent() }}
 	 <script src="http://autobahn.s3.amazonaws.com/js/autobahn.min.js"></script>
 	 <script>
-	 	var unviewedGames = [];
-	 	var FINISHED_GAME = 2;
-	 	{% for game in unviewedGames %}	
-	 		unviewedGames.push({{game.id}});
+	 	var liveGames = [];
+	 	var FINISHED_GAME = {{ constant('AppBundle\\Entity\\Game::STATE_FINISHED') }};
+	 	{% for game in liveGames %}	
+	 		liveGames.push({{game.id}});
 	 	{% endfor %}
 	 	
 	    var conn = new ab.Session('ws://localhost:8080',
@@ -50,10 +50,19 @@
 	    	$("#game-" + game.id ).find('td.game-name').text(game.name);
 	    	$("#game-" + game.id ).find('td.game-player-count').text(game.noPlayers);
 	    	$("#game-" + game.id ).find('td.game-state').text(game.state);
+	    	flashGameRow(game);
+	    }
+	    
+	    function flashGameRow(game){
+	    	$("#game-" + game.id).animate({
+				color: "#8bed7e"
+			}, 1500).animate({
+				color: "#000"
+			}, 1500);
 	    }
 	    
 	    function showMyGame(game){
-	    	if(game.state == FINISHED_GAME && $.inArray(game.id, unviewedGames)){
+	    	if(game.state == FINISHED_GAME && $.inArray(game.id, liveGames) !== -1){
 	    		window.open('/secure/game-play/' + game.id);
 	    	}
 	    }

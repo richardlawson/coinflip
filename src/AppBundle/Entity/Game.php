@@ -14,8 +14,13 @@ class Game{
 	const FLIP_TYPE_TAILS_STRING = 'tails';
 	const PLAYERS_NEEDED = 2;
 	const MAX_PLAYERS = 2;
-	const STATE_INITIALIZED = 1;
-	const STATE_FINISHED = 2;
+	// aka waiting for players
+	const STATE_INITIALIZED = 0;
+	// we have a player but not enough yet
+	const STATE_HAS_PLAYERS_BUT_NOT_READY = 1;
+	// we have enough players to play game
+	const STATE_READY_TO_PLAY = 2;
+	const STATE_FINISHED = 3;
 
 	protected static $flipTypes = [self::FLIP_TYPE_HEADS,self::FLIP_TYPE_TAILS];
 	
@@ -72,6 +77,9 @@ class Game{
 	 */
 	public function playGame()
 	{
+		if($this->gameState == SELF::STATE_FINISHED){
+			throw new CannotPlayFinishedGameException();
+		}
 		if(!$this->isGameReady()){
 			throw new NotEnoughPlayersException();
 		}
@@ -93,7 +101,7 @@ class Game{
 	 */
 	public function isGameReady()
 	{
-		return ($this->getPlayerCount() == self::PLAYERS_NEEDED);
+		return ($this->gameState == self::STATE_READY_TO_PLAY);
 	}
 	
 	/**
@@ -131,16 +139,24 @@ class Game{
 	 */
 	public function addPlayer(Player $player)
 	{
+		if($this->gameState == self::STATE_FINISHED){
+			throw new CannotAlterFinishedGameException();
+		}
+		if($this->gameState == self::STATE_READY_TO_PLAY){
+			throw new GameFullException();
+		}
 		if($this->playerAlreadyAdded($player)){
 			throw new PlayerAlreadyAddedException();
-		}
-		if($this->getPlayerCount() == self::MAX_PLAYERS){
-			throw new TooManyPlayersException();
 		}
 		if($this->isFlipTypeInUse($player->getFlipType())){
 			throw new FlipTypeAlreadySelectedException();
 		}
 		$this->players[] = $player;
+		if($this->getPlayerCount() == self::PLAYERS_NEEDED){
+			$this->gameState = SELF::STATE_READY_TO_PLAY;
+		}else{
+			$this->gameState = SELF::STATE_HAS_PLAYERS_BUT_NOT_READY;
+		}
 	}
 	
 	/**
@@ -184,7 +200,15 @@ class Game{
      */
     public function removePlayer(\AppBundle\Entity\Player $player)
     {
+    	if($this->gameState == self::STATE_FINISHED){
+    		throw new CannotAlterFinishedGameException();
+    	}
         $this->players->removeElement($player);
+        if($this->getPlayerCount() == 0){
+        	$this->gameState = SELF::STATE_INITIALIZED;
+        }else{
+        	$this->gameState = SELF::STATE_HAS_PLAYERS_BUT_NOT_READY;
+        }
     }
     
     /**

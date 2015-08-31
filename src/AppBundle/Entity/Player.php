@@ -84,7 +84,8 @@ class Player{
      */
     public function setGame(\AppBundle\Entity\Game $game = null)
     {
-        $this->game = $game;
+        $game->addPlayer($this);
+    	$this->game = $game;
 
         return $this;
     }

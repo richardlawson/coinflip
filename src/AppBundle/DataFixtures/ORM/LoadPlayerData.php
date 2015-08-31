@@ -16,19 +16,27 @@ class LoadPlayerData extends AbstractFixture implements OrderedFixtureInterface
 	 */
 	public function load(ObjectManager $manager)
 	{
-		$this->setUpOnePlayerGame($manager);
+		$this->setUpOnePlayerGameWithHeads($manager);
+		$this->setUpOnePlayerGameWithTails($manager);
 		$this->setUpTwoPlayerGameWhereOnlyOnePlayerHasViewedTheGame($manager);
 	}
 	
-	protected function setUpOnePlayerGame($manager){
+	protected function setUpOnePlayerGameWithHeads($manager){
 		$player = new Player($this->getReference('user-ricardo75'), Game::FLIP_TYPE_HEADS);
 		$player->setGame($this->getReference('game-new-york'));
 		$manager->persist($player);
 		$manager->flush();
 	}
 	
+	protected function setUpOnePlayerGameWithTails($manager){
+		$player = new Player($this->getReference('user-ricardo75'), Game::FLIP_TYPE_TAILS);
+		$player->setGame($this->getReference('game-nevada'));
+		$manager->persist($player);
+		$manager->flush();
+	}
+	
 	protected function setUpTwoPlayerGameWhereOnlyOnePlayerHasViewedTheGame($manager){
-		$game = $this->getReference('game-nevada');
+		$game = $this->getReference('game-utah');
 		$player1 = new Player($this->getReference('user-ricardo75'), Game::FLIP_TYPE_HEADS);
 		$player1->setGame($game);
 		$manager->persist($player1);
@@ -37,9 +45,7 @@ class LoadPlayerData extends AbstractFixture implements OrderedFixtureInterface
 		$player2->setGame($game);
 		$player2->setViewedGame(true);
 		$manager->persist($player2);
-		
-		$game->addPlayer($player1);
-		$game->addPlayer($player2);
+	
 		$game->setRandomGenerator(new RandomHeadTailsGenerator());
 		$game->playGame();
 		

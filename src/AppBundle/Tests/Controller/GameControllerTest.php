@@ -89,9 +89,11 @@ class GameControllerTest extends WebTestCase
 	
 	public function testSecondUserCanOnlySeeFlipOptionHeadsWhenTailsAlreadySelectedByFirst()
 	{
-		 $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+		$this->client = static::createClient();
+		$crawler = $this->client->request('GET', '/secure/game/6');
+		$crawler = $this->doLogin('flipshark', 'aberdeen');
+		$this->assertTrue($crawler->filter('#formheads_heads')->count() == 1);
+		$this->assertTrue($crawler->filter('#formtails_tails')->count() == 0);
 	}
 	
 	public function testUserGetsTakenToGamePlayPageWhenTheyJoinAGameWithAnExistingPlayer()
@@ -109,7 +111,7 @@ class GameControllerTest extends WebTestCase
 	public function testUserCantViewGamePlayForGameWhereTheyAreNotOneOfThePlayers()
 	{
 		$this->client = static::createClient();
-		$crawler = $this->client->request('GET', '/secure/game-play/6');
+		$crawler = $this->client->request('GET', '/secure/game-play/7');
 		$crawler = $this->doLogin('elcondor', 'aberdeen');
 		$this->assertTrue($this->client->getResponse()->isRedirect());
 		$crawler = $this->client->followRedirect();

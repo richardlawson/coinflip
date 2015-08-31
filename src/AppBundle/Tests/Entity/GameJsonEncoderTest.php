@@ -14,7 +14,7 @@ class GameJsonEncoderTest extends \PHPUnit_Framework_TestCase{
 	}
 	
 	public function testGetEncodedObject(){
-		$expectedJson = '{"id":null,"name":"Arizona","noPlayers":2,"state":1}';
+		$expectedJson = '{"id":null,"name":"Arizona","noPlayers":2,"state":2}';
 		$game = $this->setUpGame();
 		$jsonEncoder = new GameJsonEncoder($game);
 		$gameJson = $jsonEncoder->getLiteObject();

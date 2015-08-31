@@ -46,6 +46,23 @@ class GameRepositoryTest extends WebTestCase{
     	$games = $this->repository->getFinishedGamesThatUserHasNotViewed($user);
     	$this->assertCount(0, $games);
     }
+    
+    public function testGetUserLiveGamesForUserWithLiveGames()
+    {
+    	$user = new User();
+    	$user->setId(1);
+    	$games = $this->repository->getUserLiveGames($user);
+    	$this->assertCount(2, $games);
+    	$this->assertInstanceOf('AppBundle\Entity\Game', $games[0]);
+    }
+    
+    public function testGetUserLiveGamesForUserWithoutLiveGames()
+    {
+    	$user = new User();
+    	$user->setId(2);
+    	$games = $this->repository->getUserLiveGames($user);
+    	$this->assertCount(0, $games);
+    }
 
     /**
      * {@inheritDoc}
