@@ -1,7 +1,7 @@
 <?php
 namespace AppBundle\Entity;
 
-class GameJsonEncoder{
+class GameJsonEncoder implements GameEncoder{
 	
 	protected $game;
 	
@@ -11,6 +11,10 @@ class GameJsonEncoder{
 	 * @param Game $game
 	 */
 	public function __construct(Game $game){
+		$this->game = $game;
+	}
+	
+	public function setGame(Game $game){
 		$this->game = $game;
 	}
 	

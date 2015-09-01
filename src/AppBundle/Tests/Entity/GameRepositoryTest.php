@@ -63,6 +63,16 @@ class GameRepositoryTest extends WebTestCase{
     	$games = $this->repository->getUserLiveGames($user);
     	$this->assertCount(0, $games);
     }
+    
+    public function testRemoveUserFromGame(){
+    	$user = new User();
+    	$user->setId(1);
+    	$this->assertInstanceOf('AppBundle\Entity\Player', $this->em->getRepository('AppBundle:Player')->find(2));
+    	$game = $this->em->getRepository('AppBundle:Game')->find(6);
+    	$this->em->getRepository('AppBundle:Game')->removeUserFromGame($user, $game);
+    	$this->assertEquals(Game::STATE_INITIALIZED, $game->getGameState());
+    	$this->assertNull($this->em->getRepository('AppBundle:Player')->find(2));
+    }
 
     /**
      * {@inheritDoc}

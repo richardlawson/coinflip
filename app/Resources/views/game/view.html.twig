@@ -8,6 +8,11 @@
 			{{ player.user.username }} {{ player.getFlipTypeAsString }}<br>
 		{% endfor %}
 	{% endif %}
+	{% for flashMessage in app.session.flashbag.get('notice') %}
+	    <div class="flash-notice">
+	        {{ flashMessage }}
+	    </div>
+	{% endfor %}
 	{% if gameFinished %}
 		<h2>The winner was {{ game.winner.user.username }} with {{ game.winner.flipTypeAsString }}</h2>
 	{% else %}
@@ -19,6 +24,8 @@
 			{% if not game.isFlipTypeInUse(constant('FLIP_TYPE_TAILS', game)) %}
 				{{ form(formTails) }}
 			{% endif %}
+		{% else %}
+			{{ form(formRemove) }}
 		{% endif %}
 	{% endif %}
 {% endblock %}

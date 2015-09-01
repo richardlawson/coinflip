@@ -23,4 +23,15 @@ class GameRepository extends EntityRepository
 		$result = $query->getResult();
 		return $result;
 	}
+	
+	public function removeUserFromGame(User $user, Game $game){
+		if($game->isUserInGame($user)){
+			$em = $this->getEntityManager();
+	    	$player = $game->getPlayerByUserId($user->getId());
+	    	// note it is important that we remove the player from the game before deleting them so that game state is updated to reflect this change
+	    	$game->removePlayer($player);
+	    	$em->remove($player);
+	    	$em->flush();
+		}
+	}
 }

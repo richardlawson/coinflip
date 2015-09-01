@@ -55,7 +55,7 @@ class GameControllerTest extends WebTestCase
     	$crawler = $this->client->request('GET', '/secure/game/1');
     	$crawler = $this->doLogin('ricardo75', 'aberdeen');
     	$this->assertFalse($crawler->filter('html:contains("ricardo75")')->count() > 0);
-    	$form = $crawler->selectButton('formheads_heads')->form();
+    	$form = $crawler->selectButton('headsFlip_heads')->form();
 		$crawler = $this->client->submit($form);
 		$this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     	$this->assertTrue($crawler->filter('html:contains("ricardo75")')->count() > 0);
@@ -66,8 +66,8 @@ class GameControllerTest extends WebTestCase
 		$this->client = static::createClient();
 		$crawler = $this->client->request('GET', '/secure/game/1');
 		$crawler = $this->doLogin('ricardo75', 'aberdeen');
-		$this->assertTrue($crawler->filter('#formheads_heads')->count() == 1);
-		$this->assertTrue($crawler->filter('#formtails_tails')->count() == 1);
+		$this->assertTrue($crawler->filter('#headsFlip_heads')->count() == 1);
+		$this->assertTrue($crawler->filter('#tailsFlip_tails')->count() == 1);
 	}
 	
 	public function testUserCantSeeFlipOptionsWhenAlreadyRegisteredForGame()
@@ -75,7 +75,8 @@ class GameControllerTest extends WebTestCase
 		$this->client = static::createClient();
 		$crawler = $this->client->request('GET', '/secure/game/5');
 		$crawler = $this->doLogin('ricardo75', 'aberdeen');
-		$this->assertTrue($crawler->filter('form')->count() == 0);
+		$this->assertTrue($crawler->filter('#headsFlip_heads')->count() == 0);
+		$this->assertTrue($crawler->filter('#tailsFlip_tails')->count() == 0);
 	}
 	
 	public function testSecondUserCanOnlySeeFlipOptionTailsWhenHeadsAlreadySelectedByFirst()
@@ -83,8 +84,8 @@ class GameControllerTest extends WebTestCase
 		$this->client = static::createClient();
 		$crawler = $this->client->request('GET', '/secure/game/5');
 		$crawler = $this->doLogin('flipshark', 'aberdeen');
-		$this->assertTrue($crawler->filter('#formheads_heads')->count() == 0);
-		$this->assertTrue($crawler->filter('#formtails_tails')->count() == 1);
+		$this->assertTrue($crawler->filter('#headsFlip_heads')->count() == 0);
+		$this->assertTrue($crawler->filter('#tailsFlip_tails')->count() == 1);
 	}
 	
 	public function testSecondUserCanOnlySeeFlipOptionHeadsWhenTailsAlreadySelectedByFirst()
@@ -92,8 +93,8 @@ class GameControllerTest extends WebTestCase
 		$this->client = static::createClient();
 		$crawler = $this->client->request('GET', '/secure/game/6');
 		$crawler = $this->doLogin('flipshark', 'aberdeen');
-		$this->assertTrue($crawler->filter('#formheads_heads')->count() == 1);
-		$this->assertTrue($crawler->filter('#formtails_tails')->count() == 0);
+		$this->assertTrue($crawler->filter('#headsFlip_heads')->count() == 1);
+		$this->assertTrue($crawler->filter('#tailsFlip_tails')->count() == 0);
 	}
 	
 	public function testUserGetsTakenToGamePlayPageWhenTheyJoinAGameWithAnExistingPlayer()
@@ -101,7 +102,7 @@ class GameControllerTest extends WebTestCase
 		$this->client = static::createClient();
 		$crawler = $this->client->request('GET', '/secure/game/5');
 		$crawler = $this->doLogin('flipshark', 'aberdeen');
-		$form = $crawler->selectButton('formtails_tails')->form();
+		$form = $crawler->selectButton('tailsFlip_tails')->form();
 		$crawler = $this->client->submit($form);
 		$this->assertTrue($this->client->getResponse()->isRedirect());
 		$crawler = $this->client->followRedirect();
@@ -116,5 +117,37 @@ class GameControllerTest extends WebTestCase
 		$this->assertTrue($this->client->getResponse()->isRedirect());
 		$crawler = $this->client->followRedirect();
 		$this->assertEquals('Games Home', $crawler->filter('h1')->first()->text());
+	}
+	
+	public function testUserRemovedFromGameWhenTheyClickLeaveGameButton()
+	{
+		$this->client = static::createClient();
+		$crawler = $this->client->request('GET', '/secure/game/5');
+		$crawler = $this->doLogin('ricardo75', 'aberdeen');
+		$form = $crawler->selectButton('removePlayer_leave game')->form();
+		$crawler = $this->client->submit($form);
+		$this->assertTrue($this->client->getResponse()->isRedirect());
+		$crawler = $this->client->followRedirect();
+		$this->assertTrue($crawler->filter('html:contains(".flash-notice")')->count() > 0);
+	}
+	
+	public function testUserCantRemoveThemselvesFromAGameTheyAreNotPlayingIn()
+	{
+		$this->client = static::createClient();
+		$crawler = $this->doLogin('elcondor', 'aberdeen');
+		$crawler = $this->client->request('POST', '/secure/game-remove-player/7');
+		$this->assertTrue($this->client->getResponse()->isRedirect());
+		$crawler = $this->client->followRedirect();
+		$this->assertEquals('Games Home', $crawler->filter('h1')->first()->text());
+	}
+	
+	public function testUserCantSeeFlipOrLeaveFormsForFinishedGame()
+	{
+		$this->client = static::createClient();
+		$crawler = $this->client->request('GET', '/secure/game/7');
+		$crawler = $this->doLogin('flipshark', 'aberdeen');
+		$this->assertTrue($crawler->filter('#tailsFlip_tails')->count() == 0);
+		$this->assertTrue($crawler->filter('#headsFlip_heads')->count() == 0);
+		$this->assertTrue($crawler->filter('#removePlayer_leave game')->count() == 0);
 	}
 }
