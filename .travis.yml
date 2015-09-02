@@ -6,9 +6,7 @@ php:
 
 before_script: phpenv config-add myconfig.ini
   - cp app/config/parameters.yml.dist app/config/parameters.yml
-  - chmod 777 app/bootstrap.php.cache
-  - composer self-update
-  - composer install --prefer-source --no-interaction --dev
+  - composer install
 
 script:
   - phpunit -c app/
