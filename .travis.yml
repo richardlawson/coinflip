@@ -10,7 +10,7 @@ before_script: phpenv config-add myconfig.ini
   - composer install --prefer-source --no-interaction --dev
 
 script:
-  - phpunit -c app
+  - phpunit -c app/
 
 notifications:
   email:
