@@ -7,7 +7,7 @@ php:
 before_script: phpenv config-add myconfig.ini
   - cp app/config/parameters.yml.dist app/config/parameters.yml
   - composer install
-  - php /home/travis/build/richardlawson/coinflip/vendor/sensio/distribution-bundle/Sensio/Bundle/DistributionBundle/Resources/bin/build_bootstrap.php
+  - php ./vendor/sensio/distribution-bundle/Sensio/Bundle/DistributionBundle/Resources/bin/build_bootstrap.php
 
 script:
   - phpunit -c app/
