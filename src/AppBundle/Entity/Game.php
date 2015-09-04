@@ -2,6 +2,8 @@
 namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use AppBundle\Validator\Constraints as CoinFlipAssert;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Entity\GameRepository")
@@ -38,8 +40,18 @@ class Game{
 	
 	/**
 	 * @ORM\Column(type="string", length=25)
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 25,
+     *      minMessage = "Name must be at least {{ limit }} characters long",
+     *      maxMessage = "Name cannot be longer than {{ limit }} characters"
+     * )
+     * @CoinFlipAssert\NameIsNotInUse(groups={"New"})
 	 */
 	protected $name;
+	
+	public static $oldName;
 	
 	/**
 	 * @ORM\Column(type="smallint")

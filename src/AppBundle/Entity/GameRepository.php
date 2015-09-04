@@ -8,7 +8,8 @@ use AppBundle\Entity\Game;
 class GameRepository extends EntityRepository
 {
 
-	public function getFinishedGamesThatUserHasNotViewed(User $user){
+	public function getFinishedGamesThatUserHasNotViewed(User $user)
+	{
 		$query = $this->getEntityManager()->createQuery('SELECT g FROM AppBundle:Game g JOIN g.players p JOIN p.user u WHERE u.id =:userId AND g.gameState =:state AND p.viewedGame = false');
 		$query->setParameter('userId', $user->getId());
 		$query->setParameter('state', Game::STATE_FINISHED);
@@ -16,7 +17,8 @@ class GameRepository extends EntityRepository
 		return $result;
 	}
 	
-	public function getUserLiveGames(User $user){
+	public function getUserLiveGames(User $user)
+	{
 		$query = $this->getEntityManager()->createQuery('SELECT g FROM AppBundle:Game g JOIN g.players p JOIN p.user u WHERE u.id =:userId AND g.gameState =:state');
 		$query->setParameter('userId', $user->getId());
 		$query->setParameter('state', Game::STATE_HAS_PLAYERS_BUT_NOT_READY);
@@ -24,7 +26,8 @@ class GameRepository extends EntityRepository
 		return $result;
 	}
 	
-	public function removeUserFromGame(User $user, Game $game){
+	public function removeUserFromGame(User $user, Game $game)
+	{
 		if($game->isUserInGame($user)){
 			$em = $this->getEntityManager();
 	    	$player = $game->getPlayerByUserId($user->getId());
@@ -33,5 +36,23 @@ class GameRepository extends EntityRepository
 	    	$em->remove($player);
 	    	$em->flush();
 		}
+	}
+	
+	public function getAllLiveGames()
+	{
+		$query = $this->getEntityManager()->createQuery('SELECT g FROM AppBundle:Game g WHERE g.gameState !=:state');
+		$query->setParameter('state', Game::STATE_FINISHED);
+		$result = $query->getResult();
+		return $result;
+	}
+	
+	public function isNameInUse($name)
+	{
+		$name = (string) $name;
+		$query = $this->getEntityManager()->createQuery('SELECT COUNT(g.id) FROM AppBundle:Game g WHERE g.gameState !=:state AND g.name =:name');
+		$query->setParameter('state', Game::STATE_FINISHED);
+		$query->setParameter('name', $name);
+		$result = $query->getSingleScalarResult();
+		return (boolean) $result;
 	}
 }

@@ -64,7 +64,8 @@ class GameRepositoryTest extends WebTestCase{
     	$this->assertCount(0, $games);
     }
     
-    public function testRemoveUserFromGame(){
+    public function testRemoveUserFromGame()
+    {
     	$user = new User();
     	$user->setId(1);
     	$this->assertInstanceOf('AppBundle\Entity\Player', $this->em->getRepository('AppBundle:Player')->find(2));
@@ -72,6 +73,31 @@ class GameRepositoryTest extends WebTestCase{
     	$this->em->getRepository('AppBundle:Game')->removeUserFromGame($user, $game);
     	$this->assertEquals(Game::STATE_INITIALIZED, $game->getGameState());
     	$this->assertNull($this->em->getRepository('AppBundle:Player')->find(2));
+    }
+    
+    public function testGetAllLiveGames()
+    {
+    	$games = $this->repository->getAllLiveGames();
+    	$this->assertCount(6, $games);
+    	$this->assertInstanceOf('AppBundle\Entity\Game', $games[0]);
+    }
+    
+    public function testIsNameInUseWhenLiveGameExistsWithName()
+    {
+    	$newGameName = 'Arizona';
+    	$this->assertTrue($this->repository->isNameInUse($newGameName));
+    }
+    
+    public function testIsNameInUseWhenNoLiveGamesExistWithName()
+    {
+    	$newGameName = 'New Hampshire';
+    	$this->assertFalse($this->repository->isNameInUse($newGameName));
+    }
+    
+    public function testIsNameInUseReturnsFalseWhenFinishedGamesExistWithNameButNoLiveGames()
+    {
+    	$newGameName = 'Utah';
+    	$this->assertFalse($this->repository->isNameInUse($newGameName));
     }
 
     /**

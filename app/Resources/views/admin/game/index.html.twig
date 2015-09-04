@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<h1>Admin Games Home</h1>
+	{% for flashMessage in app.session.flashbag.get('notice') %}
+	    <div class="flash-notice">
+	        {{ flashMessage }}
+	    </div>
+	{% endfor %}
+	<p><a href="{{ path('admin_game_add') }}">Add Game</a></p>
+	{% if games %}
+		<table>
+		<tr>
+			<th>name</th>
+			<th>no players</th>
+			<th>state</th>
+			<th>view</th>
+		<tr>
+		{% for game in games %}
+			<tr id="game-{{game.id}}">
+				<td class="game-name">{{game.name}}</td>
+				<td class="game-player-count">{{game.getPlayerCount()}}</td>
+				<td class="game-state">{{game.gameState}}</td>
+				<td><a href="{{ path('admin_game_edit', { id: game.id }) }}">Edit</a></td>
+				<td><a href="{{ path('admin_game_delete', { id: game.id }) }}">Delete</a></td>
+			</tr>
+	 	{% endfor %}
+	 	</table>
+	{% endif %}
+{% endblock %}
