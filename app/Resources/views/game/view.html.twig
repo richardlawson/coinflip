@@ -4,9 +4,11 @@
 	<h1>{{game.name}}</h1>
 	<p>Players:</p>
 	{% if game.players %}
+		<div class="players">
 		{% for player in game.players %}
 			{{ player.user.username }} {{ player.getFlipTypeAsString }}<br>
 		{% endfor %}
+		</div>
 	{% endif %}
 	{% for flashMessage in app.session.flashbag.get('notice') %}
 	    <div class="flash-notice">

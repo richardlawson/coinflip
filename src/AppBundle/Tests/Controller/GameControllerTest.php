@@ -54,7 +54,7 @@ class GameControllerTest extends WebTestCase
     	$this->client = static::createClient();
     	$crawler = $this->client->request('GET', '/secure/game/1');
     	$crawler = $this->doLogin('ricardo75', 'aberdeen');
-    	$this->assertFalse($crawler->filter('html:contains("ricardo75")')->count() > 0);
+    	$this->assertFalse($crawler->filter('div:contains("ricardo75")')->count() > 0);
     	$form = $crawler->selectButton('headsFlip_heads')->form();
 		$crawler = $this->client->submit($form);
 		$this->assertEquals(200, $this->client->getResponse()->getStatusCode());
