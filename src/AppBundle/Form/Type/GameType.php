@@ -14,6 +14,7 @@ class GameType extends AbstractType
 	{
 		$builder
 		->add('name', 'text')
+		->add('oldName', 'hidden')
     	->add('save', 'submit')
 		;
 	}
@@ -23,9 +24,9 @@ class GameType extends AbstractType
 		$resolver->setDefaults(array(
 			'data_class' => 'AppBundle\Entity\Game',
 			'validation_groups' => function(FormInterface $form){
-				if(Game::$oldName){
-					$data = $form->getData();
-					if(Game::$oldName == $data->getName()){
+				$data = $form->getData();
+				if($data->getOldName()){
+					if($data->getOldName() == $data->getName()){
 						return array('Default');
 					}
 				}

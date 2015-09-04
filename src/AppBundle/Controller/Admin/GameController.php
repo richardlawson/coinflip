@@ -68,7 +68,7 @@ class GameController extends Controller
      */
     public function editAction(Game $game, Request $request)
     {
-    	$game::$oldName = $game->getName();
+    	$game->setOldName($game->getName());
     	$form = $this->createForm(new GameType(), $game);
     	 
     	$form->handleRequest($request);

@@ -51,7 +51,7 @@ class Game{
 	 */
 	protected $name;
 	
-	public static $oldName;
+	protected $oldName;
 	
 	/**
 	 * @ORM\Column(type="smallint")
@@ -292,6 +292,29 @@ class Game{
     public function getName()
     {
         return $this->name;
+    }
+    
+    /**
+     * Set oldName
+     *
+     * @param string $oldName
+     * @return Game
+     */
+    public function setOldName($oldName)
+    {
+    	$this->oldName = $oldName;
+    
+    	return $this;
+    }
+    
+    /**
+     * Get oldName
+     *
+     * @return string
+     */
+    public function getOldName()
+    {
+    	return $this->oldName;
     }
 
     /**
