@@ -39,6 +39,7 @@ class GameController extends Controller
         ));
         
         $response = new Response($content);
+        $this->disablePageCaching($response);
         
         $socketPinger = $this->get('socket_pinger');
         if(!$socketPinger->isSocketServerWorking()){
@@ -48,10 +49,17 @@ class GameController extends Controller
         return $response;
     }
     
-    protected function setUpPageRefresh($response)
+    protected function setUpPageRefresh(Response $response)
     {
     	$response->headers->set('Refresh', self::REFRESH_RATE_SECS);
     	$response->send();
+    }
+    
+    protected function disablePageCaching(Response $response){
+	    $response->headers->addCacheControlDirective('no-cache', true);
+	    $response->headers->addCacheControlDirective('max-age', 0);
+	    $response->headers->addCacheControlDirective('must-revalidate', true);
+	    $response->headers->addCacheControlDirective('no-store', true);
     }
     
     /**
@@ -59,6 +67,7 @@ class GameController extends Controller
      */
     public function viewAction(Game $game, Request $request)
     {
+    	$em = $this->getDoctrine()->getManager();
     	$headsForm = $this->createForm(new HeadsFlipType(), array('flipType' => Game::FLIP_TYPE_HEADS));
     	$tailsForm = $this->createForm(new TailsFlipType(), array('flipType' => Game::FLIP_TYPE_TAILS));
     	$removeForm = $this->createForm(new RemovePlayerType(), array(), array(
@@ -69,7 +78,6 @@ class GameController extends Controller
     	
     	if($request->isMethod('POST')){
     		$flipType = $this->getFlipTypeFromForm($headsForm, $tailsForm, $request);
-    		$em = $this->getDoctrine()->getManager();
     		$this->createPlayerAddToGameAndPersist($user, $game, $flipType, $em);
     		if($game->isGameReady()){
     			$this->playGame($game, $em);
@@ -82,9 +90,11 @@ class GameController extends Controller
     	
     	$userInGame = $game->isUserInGame($user);
     	$gameFinished = $game->getGameState() == Game::STATE_FINISHED;
+    	$liveGames = $em->getRepository('AppBundle:Game')->getUserLiveGames($this->getUser());
     	
     	return $this->render('game/view.html.twig', array(
     		'game' => $game,
+    		'liveGames' => $liveGames,
     		'userInGame' => $game->isUserInGame($user),
     		'formHeads' => $headsForm->createView(),
     		'formTails' => $tailsForm->createView(),

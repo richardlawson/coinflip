@@ -6,6 +6,7 @@ use AppBundle\Tests\WebTestCase;
 
 class DefaultControllerTest extends WebTestCase
 {	
+	
     public function testIndex()
     {
         $this->client = static::createClient();

@@ -6,7 +6,7 @@
 	{% if game.players %}
 		<div class="players">
 		{% for player in game.players %}
-			{{ player.user.username }} {{ player.getFlipTypeAsString }}<br>
+			<p>{{ player.user.username }} {{ player.getFlipTypeAsString }}</p>
 		{% endfor %}
 		</div>
 	{% endif %}
@@ -19,7 +19,7 @@
 		<h2>The winner was {{ game.winner.user.username }} with {{ game.winner.flipTypeAsString }}</h2>
 	{% else %}
 		{% if not userInGame %}
-			<p>Pick a flip type</p>
+			<p id="pick-text">Pick a flip type</p>
 			{% if not game.isFlipTypeInUse(constant('FLIP_TYPE_HEADS', game)) %}
 				{{ form(formHeads) }}
 			{% endif %}
@@ -30,5 +30,62 @@
 			{{ form(formRemove) }}
 		{% endif %}
 	{% endif %}
+	<p><a href="{{ path('game_home')}}">Back to games</a></p>
 {% endblock %}
+{% block javascripts %}
+ 	 {{ parent() }}
+	 <script src="http://autobahn.s3.amazonaws.com/js/autobahn.min.js"></script>
+	 <script>
+	    var FINISHED_GAME = {{ constant('AppBundle\\Entity\\Game::STATE_FINISHED') }};
+	 	var currentGame = {{ game.id }};
+	 	var liveGames = [];
+	 	{% for game in liveGames %}	
+	 		liveGames.push({{game.id}});
+	 	{% endfor %}
+	 	
+	    var conn = new ab.Session('ws://localhost:8080',
+	        function() {
+	            conn.subscribe('games', function(topic, data) {
+	            	// our json is actually a json string, so make it a json object
+	            	var game = jQuery.parseJSON(data);
+	                showMyGame(game);
+	                if(currentGame == game.id && game.state != FINISHED_GAME){
+	                	refreshPage();
+	                }
+	               
+	            });
+	        },
+	        function() {
+	            console.warn('WebSocket connection closed');
+	        },
+	        {'skipSubprotocolCheck': true}
+	    );
+	    
+	    function showMyGame(game){
+	    	if(game.state == FINISHED_GAME && $.inArray(game.id, liveGames) !== -1){
+	    		window.open('/secure/game-play/' + game.id);
+	    		if(currentGame == game.id){
+		    		$('#pick-text').hide();
+		    		$('form[name="tailsFlip"]').hide();
+		    		$('form[name="headsFlip"]').hide();
+		    		$('form[name="removePlayer"]').hide();
+		    		var playersHtml = '';
+		    		for(var i = 0; i < game.players.length; i++) {
+					    var player = game.players[i];
+						playersHtml += '<p>' + player.username + ' ' + player.flipTypeAsString + '</p>';
+					}
+		    		$('.players').html(playersHtml);
+		    	}
+	    	}
+	    }
+	    
+	    function refreshPage(){
+	    	window.location.reload();
+	    } 
+	</script>	
+{% endblock %}
+
+
+
+
 

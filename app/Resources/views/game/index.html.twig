@@ -25,8 +25,8 @@
  	 {{ parent() }}
 	 <script src="http://autobahn.s3.amazonaws.com/js/autobahn.min.js"></script>
 	 <script>
-	 	var liveGames = [];
 	 	var FINISHED_GAME = {{ constant('AppBundle\\Entity\\Game::STATE_FINISHED') }};
+	 	var liveGames = [];
 	 	{% for game in liveGames %}	
 	 		liveGames.push({{game.id}});
 	 	{% endfor %}

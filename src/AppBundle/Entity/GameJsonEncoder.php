@@ -1,7 +1,7 @@
 <?php
 namespace AppBundle\Entity;
 
-class GameJsonEncoder implements GameEncoder{
+class GameJsonEncoder extends GameEncoder{
 	
 	protected $game;
 	
@@ -14,10 +14,6 @@ class GameJsonEncoder implements GameEncoder{
 		$this->game = $game;
 	}
 	
-	public function setGame(Game $game){
-		$this->game = $game;
-	}
-	
 	/**
 	 * Gets basic json representaion of game
 	 *
@@ -25,15 +21,6 @@ class GameJsonEncoder implements GameEncoder{
 	 */
 	public function getLiteObject(){
 		return json_encode($this->getAsArray());
-	}
-	
-	protected function getAsArray(){
-		$gameArray = [];
-		$gameArray['id'] = $this->game->getId();
-		$gameArray['name'] = $this->game->getName();
-		$gameArray['noPlayers'] = $this->game->getPlayerCount();
-		$gameArray['state'] = $this->game->getGameState();
-		return $gameArray;
 	}
 	
 }

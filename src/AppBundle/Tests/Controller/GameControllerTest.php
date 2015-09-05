@@ -7,6 +7,7 @@ use AppBundle\Entity\Game;
 
 class GameControllerTest extends WebTestCase
 {	
+	
     public function testIndex()
     {
         $this->client = static::createClient();
