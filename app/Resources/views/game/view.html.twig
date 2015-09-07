@@ -51,6 +51,8 @@
 	                showMyGame(game);
 	                if(currentGame == game.id && game.state != FINISHED_GAME){
 	                	refreshPage();
+	                }else if(currentGame == game.id){
+	                	refreshViewForFinishedGame(game)
 	                }
 	               
 	            });
@@ -65,18 +67,22 @@
 	    	if(game.state == FINISHED_GAME && $.inArray(game.id, liveGames) !== -1){
 	    		window.open('/secure/game-play/' + game.id);
 	    		if(currentGame == game.id){
-		    		$('#pick-text').hide();
-		    		$('form[name="tailsFlip"]').hide();
-		    		$('form[name="headsFlip"]').hide();
-		    		$('form[name="removePlayer"]').hide();
-		    		var playersHtml = '';
-		    		for(var i = 0; i < game.players.length; i++) {
-					    var player = game.players[i];
-						playersHtml += '<p>' + player.username + ' ' + player.flipTypeAsString + '</p>';
-					}
-		    		$('.players').html(playersHtml);
+		    		
 		    	}
 	    	}
+	    }
+	    
+	    function refreshViewForFinishedGame(game){
+	    	$('#pick-text').hide();
+		    $('form[name="tailsFlip"]').hide();
+		    $('form[name="headsFlip"]').hide();
+		    $('form[name="removePlayer"]').hide();
+		    var playersHtml = '';
+		    for(var i = 0; i < game.players.length; i++) {
+				var player = game.players[i];
+				playersHtml += '<p>' + player.username + ' ' + player.flipTypeAsString + '</p>';
+			}
+		    $('.players').html(playersHtml);
 	    }
 	    
 	    function refreshPage(){
