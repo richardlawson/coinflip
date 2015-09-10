@@ -8,6 +8,7 @@ use AppBundle\Validator\Constraints as CoinFlipAssert;
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Entity\GameRepository")
  * @ORM\Table(name="games")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Game{
 	const FLIP_TYPE_HEADS = 1;
@@ -66,10 +67,38 @@ class Game{
 	 **/
 	protected $winner;
 	
+	/**
+	 * @ORM\Column(type="datetime")
+	 */
+	protected $createdAt;
+	
+	/**
+	 * @ORM\Column(type="datetime",nullable=true)
+	 */
+	protected $finishedAt;
+	
 	public function __construct(RandomHeadTailsGenerator $generator)
 	{
 		$this->generator = $generator;
 		$this->players = new ArrayCollection();
+	}
+	
+	/**
+	 * @ORM\PrePersist 
+	 */
+	public function setCreatedAtValue()
+	{
+		$this->createdAt = new \DateTime();
+	}
+	
+	/**
+	 * @ORM\PreUpdate
+	 */
+	public function setFinishedAtValue()
+	{
+		if(is_null($this->finishedAt) && $this->gameState == self::STATE_FINISHED){
+			$this->finishedAt = new \DateTime();
+		}
 	}
 	
 	/**
@@ -335,6 +364,26 @@ class Game{
     public function getWinner()
     {
         return $this->winner;
+    }
+    
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+    	return $this->createdAt;
+    }
+    
+    /**
+     * Get finishedAt
+     *
+     * @return \DateTime
+     */
+    public function getFinishedAt()
+    {
+    	return $this->finishedAt;
     }
     
     /**
