@@ -23,7 +23,7 @@ class GameTest extends \PHPUnit_Framework_TestCase{
 		$this->user2->setUsername('coolcat');
 		$this->user3 = new User();
 		$this->user3->setId(3);
-		$this->user2->setUsername('flipshark');
+		$this->user3->setUsername('flipshark');
 	}
 	
 	public function testGameObjectCreated(){

@@ -17,6 +17,7 @@ use AppBundle\Socket\GameUpdateNotifier;
 use AppBundle\Form\Type\RemovePlayerType;
 use AppBundle\Form\Type\HeadsFlipType;
 use AppBundle\Form\Type\TailsFlipType;
+use AppBundle\Entity\GameManager;
 
 class GameController extends Controller
 {
@@ -81,6 +82,8 @@ class GameController extends Controller
     		$this->createPlayerAddToGameAndPersist($user, $game, $flipType, $em);
     		if($game->isGameReady()){
     			$this->playGame($game, $em);
+    			$replacementGame = $this->createReplacementGame($game, $em); 
+    			$this->notifyPlayersOfGameUpdate($replacementGame);
     			$this->notifyPlayersOfGameUpdate($game);
     			return $this->redirectToRoute('game_play', array('id' => $game->getId()), 301);
     		}
@@ -128,6 +131,15 @@ class GameController extends Controller
 		$game->setRandomGenerator(new RandomHeadTailsGenerator());
     	$game->playGame();
     	$em->flush();
+	}
+	
+	protected function createReplacementGame(Game $game, EntityManager $em)
+	{
+		$gameManager = new GameManager();
+		$replacementGame = $gameManager->getReplacementGame($game);
+		$em->persist($replacementGame);
+		$em->flush();
+		return $replacementGame;
 	}
 	
 	protected function createPlayerAddToGameAndPersist(User $user, Game $game, $flipType, EntityManager $em)

@@ -25,6 +25,7 @@ abstract class GameEncoder{
 		$gameArray['name'] = $this->game->getName();
 		$gameArray['noPlayers'] = $this->game->getPlayerCount();
 		$gameArray['state'] = $this->game->getGameState();
+		$gameArray['replacedGameId'] = $this->game->getReplacedGameId();
 		$gameArray['players'] = $this->getPlayersAsArray();
 		return $gameArray;
 	}

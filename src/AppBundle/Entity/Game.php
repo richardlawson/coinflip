@@ -77,6 +77,11 @@ class Game{
 	 */
 	protected $finishedAt;
 	
+	/**
+	 * When a game finishes a new game is automatically setup. $replacedGameId is the id of the game that finished
+	 */
+	protected $replacedGameId;
+	
 	public function __construct(RandomHeadTailsGenerator $generator)
 	{
 		$this->generator = $generator;
@@ -101,11 +106,6 @@ class Game{
 		}
 	}
 	
-	/**
-	 * Add random generator
-	 *
-	 * @param RandomHeadTailsGenerator $generator
-	 */
 	public function setRandomGenerator(RandomHeadTailsGenerator $generator)
 	{
 		$this->generator = $generator;
@@ -253,6 +253,19 @@ class Game{
     }
     
     /**
+     * Set id
+     *
+     * @param integer $id
+     * @return Game
+     */
+    public function setId($id)
+    {
+    	$this->id = $id;
+    	
+    	return $this;
+    }
+    
+    /**
      * Get id
      *
      * @return integer
@@ -385,6 +398,30 @@ class Game{
     {
     	return $this->finishedAt;
     }
+    
+    /**
+     * Get replacedGameid
+     *
+     * @return integer
+     */
+    public function getReplacedGameId()
+    {
+    	return $this->replacedGameId;
+    }
+    
+    /**
+     * Set replacedGameId
+     *
+     * @param integer $replacedGameId
+     * @return Game
+     */
+    public function setReplacedGameId($replacedGameId)
+    {
+    	$this->replacedGameId = $replacedGameId;
+    
+    	return $this;
+    }
+    
     
     /**
      * Get fliptypes

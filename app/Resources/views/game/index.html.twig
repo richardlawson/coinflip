@@ -26,6 +26,7 @@
 	 <script src="http://autobahn.s3.amazonaws.com/js/autobahn.min.js"></script>
 	 <script>
 	 	var FINISHED_GAME = {{ constant('AppBundle\\Entity\\Game::STATE_FINISHED') }};
+	 	var INITIALIZED_GAME = {{ constant('AppBundle\\Entity\\Game::STATE_INITIALIZED') }};
 	 	var liveGames = [];
 	 	{% for game in liveGames %}	
 	 		liveGames.push({{game.id}});
@@ -36,7 +37,11 @@
 	            conn.subscribe('games', function(topic, data) {
 	            	// our json is actually a json string, so make it a json object
 	            	var game = jQuery.parseJSON(data);
-	                refreshGameRow(game);
+	                if(isNewGame(game)){
+	                	addNewGameRow(game);
+	                }else{
+	                	refreshGameRow(game);
+	                }
 	                showMyGame(game);
 	            });
 	        },
@@ -45,6 +50,24 @@
 	        },
 	        {'skipSubprotocolCheck': true}
 	    );
+	    
+	    function isNewGame(game){
+	    	if(game.state == INITIALIZED_GAME && game.replacedGameId > 0){
+	    		return true;
+	    	}else{
+	    		return false;
+	    	}
+	    }
+	    
+	    function addNewGameRow(game){
+	     	$trHtml = '<tr id="game-' + game.id + '">' 
+	        $trHtml += '<td class="game-name">' + game.name + '</td>';
+	        $trHtml += '<td class="game-player-count">' + game.noPlayers + '</td>';
+	        $trHtml += '<td class="game-state">' + game.state + '</td>';
+	        $trHtml += '<td><a href="/secure/game/' + game.id + '">Register</a></td>';
+	        $trHtml += '</tr>';
+	        $("#game-" + game.replacedGameId ).after($trHtml);
+	    }
 	    
 	    function refreshGameRow(game){
 	    	$("#game-" + game.id ).find('td.game-name').text(game.name);
