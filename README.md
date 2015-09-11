@@ -39,7 +39,7 @@ Once the vagrant box is up and running, you will need to do the following (FIRST
 
 2. Go to the project directory: cd /vagrant
 
-2. Clear symfony's cache (should only be necessary if you have been running the project on your local computer):
+3. Clear symfony's cache (should only be necessary if you have been running the project on your local computer):
 
 php app/console cache:clear --env=prod
 
@@ -47,7 +47,7 @@ php app/console cache:clear --env=test
 
 php app/console cache:clear --env=dev
 
-3. Set up the database. Do the following to achieve this:
+4. Set up the database. Do the following to achieve this:
 
 php app/console doctrine:database:create
 
@@ -57,10 +57,10 @@ php app/console doctrine:schema:update --force
 
 Note ./fixturesrunner.sh is a shell script the loads in the project default data
 
-4. Setup the socket server. Note that you will need to keep the vagrant window that runs the socket open as it runs in the command prompt that created it. Use another vagrant window to do anything else with the rest of the project. If you close this window the socket server will stop.
+5. Setup the socket server. Note that you will need to keep the vagrant window that runs the socket open as it runs in the command prompt that created it. Use another vagrant window to do anything else with the rest of the project. If you close this window the socket server will stop.
 
 php ./socketbin/game-push-server.php
 
 When you run the socket script it should look like the command prompt is hanging (why you need to open a new vagrant window to work on the project). 
 
-5. You should now be able to access the site by going to: http://test.coinflip.dev:5000 . Remmber to include port number (5000) in your url.
+6. You should now be able to access the site by going to: http://test.coinflip.dev:5000 . Remmber to include port number (5000) in your url.
