@@ -23,11 +23,15 @@ On this page it will tell you to do the following
 Running Vagrant
 ==================
 
-Before you do anything you will need to add the following line to your hosts file (on a mac this is at: /etc/hosts)
+Note: after doing the below you should be able to see the site by going to http://test.coinflip.dev:5000 in your browser.
+
+Before you do anything, you will need to add the following line to your hosts file (on a mac this is at: /etc/hosts)
 
 127.0.0.1       test.coinflip.dev
 
 To run vagrant, use the following command: vagrant up
+
+[Edit: I have now added a shell script that does all of the below for you. You should only need to run it after you have set up your vagrant box for the first time. The shell script is called vagrantfirsttime.sh. You should run this script in the /vagrant directory on your box e.g. (1) vagrant ssh (2) cd /vagrant (3) ./vagrantfirsttime.sh . Note: the last thing the shell script does is setup the socket server, so you will need to open a new vagrant command prompt to work with the rest of the project. If that works out and you can see the website, you can skip the below steps.]
 
 Once the vagrant box is up and running, you will need to do the following (FIRST TIME ONLY):
 
@@ -59,4 +63,4 @@ php ./socketbin/game-push-server.php
 
 When you run the socket script it should look like the command prompt is hanging (why you need to open a new vagrant window to work on the project). 
 
-5. You should now be able to access the site by going to: http://test.coinflip.dev:5000 . Note you need to add the port number 5000 to run the vagrant project.
+5. You should now be able to access the site by going to: http://test.coinflip.dev:5000 . Remmber to include port number (5000) in your url.
