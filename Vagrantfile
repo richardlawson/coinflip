@@ -1,9 +1,12 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "hashicorp/precise32"
   config.vm.network :forwarded_port, host: 5000, guest: 80
+  config.vm.network :forwarded_port, host: 8080, guest: 8080
+  config.vm.network "private_network", type: "dhcp"
+  config.vm.synced_folder ".", "/vagrant", type: "nfs"
   config.vm.synced_folder "app/cache", "/vagrant/app/cache", :mount_options => ["dmode=777,fmode=777"]
   config.vm.synced_folder "app/logs", "/vagrant/app/logs", :mount_options => ["dmode=777,fmode=777"]
-
+  
   config.vm.provision :shell do |shell|
     shell.inline = "mkdir -p /etc/puppet/modules;
                   puppet module install puppetlabs-stdlib;
