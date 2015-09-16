@@ -10,9 +10,10 @@ class GameManager{
 	 * @param Game $game
 	 * @return Game
 	 */
-	public function getReplacementGame(Game $game){
+	public function getReplacementGame(Game $game, GameNameFinder $gameNameFinder)
+	{
 		$replacement = new Game(new RandomHeadTailsGenerator());
-		$replacement->setName($game->getName());
+		$replacement->setName($gameNameFinder->getUniqueName());
 		$replacement->setReplacedGameId($game->getId());
 		return $replacement;
 	}

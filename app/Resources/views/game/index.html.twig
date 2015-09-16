@@ -9,7 +9,7 @@
 			<th>no players</th>
 			<th>state</th>
 			<th>view</th>
-		<tr>
+		</tr>
 		{% for game in games %}
 			<tr id="game-{{game.id}}">
 				<td class="game-name">{{game.name}}</td>
@@ -67,6 +67,7 @@
 	        $trHtml += '<td><a href="/secure/game/' + game.id + '">Register</a></td>';
 	        $trHtml += '</tr>';
 	        $("#game-" + game.replacedGameId ).after($trHtml);
+	        flashGameRow(game);
 	    }
 	    
 	    function refreshGameRow(game){

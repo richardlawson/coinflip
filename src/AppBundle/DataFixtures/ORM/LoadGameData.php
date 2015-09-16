@@ -18,7 +18,7 @@ class LoadGameData extends AbstractFixture implements OrderedFixtureInterface
 		$game->setName('Arizona');
 		
 		$game2 = new Game(new RandomHeadTailsGenerator());
-		$game2->setName('Detroit');
+		$game2->setName('Delaware');
 		
 		$game3 = new Game(new RandomHeadTailsGenerator());
 		$game3->setName('California');

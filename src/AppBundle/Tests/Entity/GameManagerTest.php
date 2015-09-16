@@ -6,6 +6,7 @@ use AppBundle\Entity\GameManager;
 use AppBundle\Entity\User;
 use AppBundle\Entity\Player;
 use AppBundle\Entity\RandomHeadTailsGenerator;
+use AppBundle\Entity\GameNameFinder;
 
 
 class GameManagerTest extends \PHPUnit_Framework_TestCase{
@@ -34,26 +35,26 @@ class GameManagerTest extends \PHPUnit_Framework_TestCase{
 	
 	public function testGetReplacementGameReturnsNewGame(){
 		$gameManager = new GameManager();
-		$replacement = $gameManager->getReplacementGame($this->game);
+		$replacement = $gameManager->getReplacementGame($this->game, new GameNameFinder([]));
 		$this->assertInstanceOf('\AppBundle\Entity\Game', $replacement);
 		$this->assertNotEquals($replacement, $this->game);
 	}	
 	
 	public function testGetReplacementGameHasInitializedState(){
 		$gameManager = new GameManager();
-		$replacement = $gameManager->getReplacementGame($this->game);
+		$replacement = $gameManager->getReplacementGame($this->game, new GameNameFinder([]));
 		$this->assertEquals(Game::STATE_INITIALIZED, $replacement->getGameState());
 	}
 	
 	public function testGetReplacementGameHasZeroPlayers(){
 		$gameManager = new GameManager();
-		$replacement = $gameManager->getReplacementGame($this->game);
+		$replacement = $gameManager->getReplacementGame($this->game, new GameNameFinder([]));
 		$this->assertEquals(0, $replacement->getPlayerCount());
 	}
 	
 	public function testGetReplacementGameReturnsGameWithReplacedGameIdSetToFinishedGame(){
 		$gameManager = new GameManager();
-		$replacement = $gameManager->getReplacementGame($this->game);
+		$replacement = $gameManager->getReplacementGame($this->game, new GameNameFinder([]));
 		$this->assertEquals(1, $replacement->getReplacedGameId());
 	}
 }

@@ -14,7 +14,7 @@ class GameControllerTest extends WebTestCase
 		$crawler = $this->client->request('GET', '/secure/games');
 		$crawler = $this->doLogin('ricardo75', 'aberdeen');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertTrue($crawler->filter('html:contains("Detroit")')->count() > 0);
+        $this->assertTrue($crawler->filter('html:contains("Delaware")')->count() > 0);
     }
     
     public function testView()
@@ -126,5 +126,20 @@ class GameControllerTest extends WebTestCase
 		$this->assertTrue($crawler->filter('#tailsFlip_tails')->count() == 0);
 		$this->assertTrue($crawler->filter('#headsFlip_heads')->count() == 0);
 		$this->assertTrue($crawler->filter('#removePlayer_leave game')->count() == 0);
+	}
+	
+	public function testNewGameCreatedWhenAnothergameFinishes()
+	{
+		$noTableRowsOnPageBeforeGamePlayed = 8;
+		$noTableRowsOnPageAfterGamePlayed = 9;
+		$this->client = static::createClient();
+		$crawler = $this->client->request('GET', '/secure/games');
+		$crawler = $this->doLogin('flipshark', 'aberdeen');
+		$this->assertEquals($noTableRowsOnPageBeforeGamePlayed, $crawler->filter('tr')->count());
+		$crawler = $this->client->request('GET', '/secure/game/5');
+		$form = $crawler->selectButton('tailsFlip_tails')->form();
+		$crawler = $this->client->submit($form);
+		$crawler = $this->client->request('GET', '/secure/games');
+		$this->assertEquals($noTableRowsOnPageAfterGamePlayed, $crawler->filter('tr')->count());
 	}
 }

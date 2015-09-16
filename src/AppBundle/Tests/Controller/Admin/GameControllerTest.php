@@ -141,7 +141,7 @@ class GameControllerTest extends WebTestCase
     	$crawler = $this->client->request('GET', '/admin/game/edit/1');
     	$buttonCrawlerNode = $crawler->selectButton('game_save');
     	$form = $buttonCrawlerNode->form(array(
-    			'game[name]' => 'Detroit',
+    			'game[name]' => 'Delaware',
     	));
     	$this->client->submit($form);
     	$this->assertRegexp(

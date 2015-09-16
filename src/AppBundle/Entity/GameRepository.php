@@ -40,8 +40,18 @@ class GameRepository extends EntityRepository
 	
 	public function getAllLiveGames()
 	{
-		$query = $this->getEntityManager()->createQuery('SELECT g FROM AppBundle:Game g WHERE g.gameState !=:state');
+		$query = $this->getEntityManager()->createQuery('SELECT g FROM AppBundle:Game g WHERE (g.gameState !=:state) OR (g.gameState = :state AND g.finishedAt > :expiryDate)');
 		$query->setParameter('state', Game::STATE_FINISHED);
+		$query->setParameter('expiryDate', new \DateTime('-2 minutes'));
+		$result = $query->getResult();
+		return $result;
+	}
+
+	public function getGameNamesInUse()
+	{
+		$query = $this->getEntityManager()->createQuery('SELECT g.name FROM AppBundle:Game g WHERE (g.gameState !=:state) OR (g.gameState = :state AND g.finishedAt > :expiryDate)');
+		$query->setParameter('state', Game::STATE_FINISHED);
+		$query->setParameter('expiryDate', new \DateTime('-2 minutes'));
 		$result = $query->getResult();
 		return $result;
 	}

@@ -78,8 +78,14 @@ class GameRepositoryTest extends WebTestCase{
     public function testGetAllLiveGames()
     {
     	$games = $this->repository->getAllLiveGames();
-    	$this->assertCount(6, $games);
+    	$this->assertCount(7, $games);
     	$this->assertInstanceOf('AppBundle\Entity\Game', $games[0]);
+    }
+    
+    public function testGetGameNamesInUse()
+    {
+    	$names = $this->repository->getGameNamesInUse();
+    	$this->assertCount(7, $names);
     }
     
     public function testIsNameInUseWhenLiveGameExistsWithName()

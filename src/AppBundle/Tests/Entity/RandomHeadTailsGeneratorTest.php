@@ -17,7 +17,7 @@ class RandomHeadTailsGeneratorTest extends \PHPUnit_Framework_TestCase{
 	 * This test gets random flips for twenty rolls to make sure the method actually returns heads and tails fliptypes
 	 * The chances of not getting at least one head or tail are very slim, so as long as the method works we should get both flip types in our results 
 	 */
-	public function testPlayerObjectCreatedWhenUsingFlipTypeHeads(){
+	public function testDoRandomFlipIsReturningRandomResults(){
 		$flips = [];
 		for($i = 0; $i < 20; $i++){
 			$flips[] = $this->generator->doRandomFlip();

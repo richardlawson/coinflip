@@ -18,6 +18,7 @@ use AppBundle\Form\Type\RemovePlayerType;
 use AppBundle\Form\Type\HeadsFlipType;
 use AppBundle\Form\Type\TailsFlipType;
 use AppBundle\Entity\GameManager;
+use AppBundle\Entity\GameNameFinder;
 
 class GameController extends Controller
 {
@@ -29,7 +30,7 @@ class GameController extends Controller
     public function indexAction()
     {
     	$em = $this->getDoctrine()->getManager();
-    	$games = $em->getRepository('AppBundle:Game')->findAll();
+    	$games = $em->getRepository('AppBundle:Game')->getAllLiveGames();
     	$unviewedGames = $em->getRepository('AppBundle:Game')->getFinishedGamesThatUserHasNotViewed($this->getUser());
     	$liveGames = $em->getRepository('AppBundle:Game')->getUserLiveGames($this->getUser());
         
@@ -136,7 +137,8 @@ class GameController extends Controller
 	protected function createReplacementGame(Game $game, EntityManager $em)
 	{
 		$gameManager = new GameManager();
-		$replacementGame = $gameManager->getReplacementGame($game);
+		$gameNameFinder = new GameNameFinder($em->getRepository('AppBundle:Game')->getGameNamesInUse());
+		$replacementGame = $gameManager->getReplacementGame($game, $gameNameFinder);
 		$em->persist($replacementGame);
 		$em->flush();
 		return $replacementGame;
