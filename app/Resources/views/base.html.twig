@@ -2,9 +2,20 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}Flip Shark - The Multiplayer Heads And Tails Coin Flip Game{% endblock %}</title>
         {% block stylesheets %}
-      
+        	<link href='https://fonts.googleapis.com/css?family=Questrial' rel='stylesheet' type='text/css'>
+        	<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
+        	<link href='https://fonts.googleapis.com/css?family=Marck+Script' rel='stylesheet' type='text/css'>
+        	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+      		{% stylesheets 
+      			'css/main.css'
+      			'css/table.css' 
+      			'css/forms.css' 
+      			'css/typography.css' 
+      			filter='cssrewrite' %}
+		        <link rel="stylesheet" href="{{ asset_url }}" />
+		    {% endstylesheets %}
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>

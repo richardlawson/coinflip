@@ -9,8 +9,8 @@ class TailsFlipType extends AbstractType
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder
-		->add('flipType', 'integer')
-    	->add('tails', 'submit')
+		->add('flipType', 'hidden')
+    	->add('tails', 'submit', array('attr' => array('class' => 'btn btn-danger')))
 		;
 	}
 

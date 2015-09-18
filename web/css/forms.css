@@ -1,0 +1,7 @@
+form[name="headsFlip"]{
+	display: inline-block;
+}
+
+form[name="tailsFlip"]{
+	display: inline-block;
+}

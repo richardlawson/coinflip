@@ -23,7 +23,7 @@ class GameControllerTest extends WebTestCase
     	$crawler = $this->client->request('GET', '/secure/game/1');
     	$crawler = $this->doLogin('ricardo75', 'aberdeen');
     	$this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-    	$this->assertEquals('Arizona',$crawler->filter('h1')->first()->text());
+    	$this->assertEquals('Game : Arizona',$crawler->filter('h1.game-name')->first()->text());
     }
     
     public function testPlayerAddedToPlayerListWhenUserClicksHeads()
@@ -93,7 +93,7 @@ class GameControllerTest extends WebTestCase
 		$crawler = $this->doLogin('elcondor', 'aberdeen');
 		$this->assertTrue($this->client->getResponse()->isRedirect());
 		$crawler = $this->client->followRedirect();
-		$this->assertEquals('Games Home', $crawler->filter('h1')->first()->text());
+		$this->assertEquals('Games Home', $crawler->filter('#game-header h1')->first()->text());
 	}
 	
 	public function testUserRemovedFromGameWhenTheyClickLeaveGameButton()
@@ -115,7 +115,7 @@ class GameControllerTest extends WebTestCase
 		$crawler = $this->client->request('POST', '/secure/game-remove-player/7');
 		$this->assertTrue($this->client->getResponse()->isRedirect());
 		$crawler = $this->client->followRedirect();
-		$this->assertEquals('Games Home', $crawler->filter('h1')->first()->text());
+		$this->assertEquals('Games Home', $crawler->filter('#game-header h1')->first()->text());
 	}
 	
 	public function testUserCantSeeFlipOrLeaveFormsForFinishedGame()

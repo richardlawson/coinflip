@@ -1,36 +1,49 @@
 {% extends 'game/layout.html.twig' %}
 
 {% block content %}
-	<h1>{{game.name}}</h1>
-	<p>Players:</p>
-	{% if game.players %}
-		<div class="players">
-		{% for player in game.players %}
-			<p>{{ player.user.username }} {{ player.getFlipTypeAsString }}</p>
+	<div id="game-header">
+		<h1 class="game-name">Game : {{game.name}}</h1>
+	</div>
+	<br class="float-fix">
+	<section id="game-view">
+		{% for flashMessage in app.session.flashbag.get('notice') %}
+		    <div class="flash-notice">
+		        {{ flashMessage }}
+		    </div>
 		{% endfor %}
-		</div>
-	{% endif %}
-	{% for flashMessage in app.session.flashbag.get('notice') %}
-	    <div class="flash-notice">
-	        {{ flashMessage }}
-	    </div>
-	{% endfor %}
-	{% if gameFinished %}
-		<h2>The winner was {{ game.winner.user.username }} with {{ game.winner.flipTypeAsString }}</h2>
-	{% else %}
-		{% if not userInGame %}
-			<p id="pick-text">Pick a flip type</p>
-			{% if not game.isFlipTypeInUse(constant('FLIP_TYPE_HEADS', game)) %}
-				{{ form(formHeads) }}
-			{% endif %}
-			{% if not game.isFlipTypeInUse(constant('FLIP_TYPE_TAILS', game)) %}
-				{{ form(formTails) }}
-			{% endif %}
-		{% else %}
-			{{ form(formRemove) }}
+		{% if game.players|length > 0 %}
+			<table class="game-table game-view">
+			<tr class="head">
+				<th>Player</th>
+				<th class="flip-type">Flip Type</th>
+			</tr>
+			{% for player in game.players %}
+				<tr>
+					<td>{{ player.user.username }}</td> 
+					<td class="flip-type">{{ player.getFlipTypeAsString }}</td>
+				</tr>
+			{% endfor %}
+			</table>
 		{% endif %}
-	{% endif %}
-	<p><a href="{{ path('game_home')}}">Back to games</a></p>
+		{% if gameFinished %}
+			<h2>The winner was {{ game.winner.user.username }} with {{ game.winner.flipTypeAsString }}</h2>
+		{% else %}
+			{% if not userInGame %}
+				<p id="pick-text">Pick a flip type :</p>
+				{% if not game.isFlipTypeInUse(constant('FLIP_TYPE_HEADS', game)) %}
+					{{ form(formHeads) }}
+				{% endif %}
+				{% if not game.isFlipTypeInUse(constant('FLIP_TYPE_TAILS', game)) %}
+					{{ form(formTails) }}
+				{% endif %}
+			{% else %}
+				{{ form(formRemove) }}
+			{% endif %}
+		{% endif %}
+	</section>
+	<section id="back">
+		<p><a href="{{ path('game_home')}}" class="btn btn-default">Back to games</a></p>
+	</section>
 {% endblock %}
 {% block javascripts %}
  	 {{ parent() }}
@@ -66,9 +79,6 @@
 	    function showMyGame(game){
 	    	if(game.state == FINISHED_GAME && $.inArray(game.id, liveGames) !== -1){
 	    		window.open('/secure/game-play/' + game.id);
-	    		if(currentGame == game.id){
-		    		
-		    	}
 	    	}
 	    }
 	    
@@ -77,12 +87,12 @@
 		    $('form[name="tailsFlip"]').hide();
 		    $('form[name="headsFlip"]').hide();
 		    $('form[name="removePlayer"]').hide();
-		    var playersHtml = '';
+		    var playersHtml = '<tr class="head"><th>Player</th><th class="flip-type">Flip Type</th></tr>';
 		    for(var i = 0; i < game.players.length; i++) {
 				var player = game.players[i];
-				playersHtml += '<p>' + player.username + ' ' + player.flipTypeAsString + '</p>';
+				playersHtml += '<tr><td>' + player.username + '</td><td class="flip-type">' + player.flipTypeAsString + '</td></tr>';
 			}
-		    $('.players').html(playersHtml);
+		    $('.game-table').html(playersHtml);
 	    }
 	    
 	    function refreshPage(){

@@ -22,6 +22,6 @@ class DefaultControllerTest extends WebTestCase
     	$crawler = $this->client->request('GET', '/');
     	$this->assertTrue($this->client->getResponse()->isRedirect());
 		$crawler = $this->client->followRedirect();
-		$this->assertEquals('Games Home', $crawler->filter('h1')->first()->text());
+		$this->assertEquals('Games Home', $crawler->filter('#game-header h1')->first()->text());
     }
 }

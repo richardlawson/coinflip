@@ -1,0 +1,75 @@
+.game-table{
+	border-collapse: collapse;
+	width: 100%;
+	color: #005c9c;
+}
+
+.game-table td{
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+	padding: 6px 10px;
+}
+
+.game-table th{
+	padding: 10px;
+	font-size: 9px;
+	text-transform: uppercase;
+	color: #000;
+}
+
+.game-table tr.head:hover{
+	background-color: #fff;
+}
+
+.game-table th.head-game{
+	text-align: left;
+}
+
+.game-table th.head-players, .game-table th.head-state, .game-table th.head-view{
+	text-align: right;
+	width: 10%;
+}
+
+.game-table th.flip-type, td.flip-type{
+	width: 15%;
+	text-align: right;
+}
+
+.game-table td.game-name{
+	text-align: left;
+}
+
+.game-table td.game-player-count, .game-table td.game-state, .game-table td.game-view{
+	text-align: right;
+}
+
+.game-table tr:hover{
+	background-color: #eee;
+}
+
+span.live-game-icon{
+	background-color: #5cb85c;
+	border-radius: 50%;
+	width: 6px;
+	height: 6px;
+	display: inline-block;
+	line-height: 5px;
+}
+
+span.finished-game-icon{
+	background-color: #F0AD4E;
+	border-radius: 50%;
+	width: 6px;
+	height: 6px;
+	display: inline-block;
+	line-height: 5px;
+}
+
+span.text-lowlight{
+	color: #bbb;
+}
+
+.game-view{
+	margin-bottom: 10px;
+}
+

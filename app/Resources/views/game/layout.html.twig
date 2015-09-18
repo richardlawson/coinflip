@@ -1,6 +1,14 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-	<p>{{ app.user.username }} | <a href="{{ path('fos_user_security_logout') }}">Logout</a></p>
+	<header id="page-header">
+		<h1>FlipShark</h1>
+		<nav id="main-nav">
+			<ul>
+				<li>{{ app.user.username }}&nbsp;<span class="glyphicon glyphicon-user"></span></li>
+				<li><a href="{{ path('fos_user_security_logout') }}">Logout <span class="glyphicon glyphicon-log-out"></span></a></li>
+			</ul>
+		</nav>
+	</header>
     {% block content %}{% endblock %}
 {% endblock %}

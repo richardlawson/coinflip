@@ -1,24 +1,39 @@
 {% extends 'game/layout.html.twig' %}
 
 {% block content %}
-	<h1>Games Home</h1>
+	<div id="game-header">
+		<h1>Games Home</h1>
+	</div>
 	{% if games %}
-		<table>
-		<tr>
-			<th>name</th>
-			<th>no players</th>
-			<th>state</th>
-			<th>view</th>
-		</tr>
-		{% for game in games %}
-			<tr id="game-{{game.id}}">
-				<td class="game-name">{{game.name}}</td>
-				<td class="game-player-count">{{game.getPlayerCount()}}</td>
-				<td class="game-state">{{game.gameState}}</td>
-				<td><a href="{{ path('game_view', { id: game.id }) }}">Register</a></td>
+		<section id="game-layout">
+			<table class="game-table">
+			<tr class="head">
+				<th class="head-game">Game&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="live-game-icon"></span>&nbsp;<span class="text-lowlight">Live</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="finished-game-icon"></span>&nbsp;<span class="text-lowlight">Finished</span></th>
+				<th class="head-players">No. Players</th>
+				<th class="head-state">State</th>
+				<th class="head-view">View</th>
 			</tr>
-	 	{% endfor %}
-	 	</table>
+			{% for game in games %}
+				<tr id="game-{{game.id}}">
+					<td class="game-name">
+						{%if(game.gameState == constant('AppBundle\\Entity\\Game::STATE_FINISHED'))%}
+							<span class="finished-game-icon"></span>
+						{% else %}
+							<span class="live-game-icon"></span>
+						{% endif %}
+						&nbsp;{{game.name}}
+					</td>
+					<td class="game-player-count">{{game.getPlayerCount()}} / {{ constant('AppBundle\\Entity\\Game::PLAYERS_NEEDED') }}</td>
+					<td class="game-state">{{game.gameStateString}}</td>
+					{%if(game.gameState == constant('AppBundle\\Entity\\Game::STATE_FINISHED'))%}
+						<td class="game-view"><a href="{{ path('game_view', { id: game.id }) }}" class="btn btn-warning btn-sm">Results</a></td>
+					{% else %}
+						<td class="game-view"><a href="{{ path('game_view', { id: game.id }) }}" class="btn btn-success btn-sm">Register</a></td>
+					{% endif %}
+				</tr>
+		 	{% endfor %}
+		 	</table>
+		</section>
 	{% endif %}
 {% endblock %}
 {% block javascripts %}
@@ -27,6 +42,7 @@
 	 <script>
 	 	var FINISHED_GAME = {{ constant('AppBundle\\Entity\\Game::STATE_FINISHED') }};
 	 	var INITIALIZED_GAME = {{ constant('AppBundle\\Entity\\Game::STATE_INITIALIZED') }};
+	 	var PLAYERS_NEEDED = {{ constant('AppBundle\\Entity\\Game::PLAYERS_NEEDED') }};
 	 	var liveGames = [];
 	 	{% for game in liveGames %}	
 	 		liveGames.push({{game.id}});
@@ -61,28 +77,39 @@
 	    
 	    function addNewGameRow(game){
 	     	$trHtml = '<tr id="game-' + game.id + '">' 
-	        $trHtml += '<td class="game-name">' + game.name + '</td>';
-	        $trHtml += '<td class="game-player-count">' + game.noPlayers + '</td>';
-	        $trHtml += '<td class="game-state">' + game.state + '</td>';
-	        $trHtml += '<td><a href="/secure/game/' + game.id + '">Register</a></td>';
+	        $trHtml += '<td class="game-name"><span class="live-game-icon"></span>&nbsp;&nbsp;' + game.name + '</td>';
+	        $trHtml += '<td class="game-player-count">' + game.noPlayers + ' / ' + PLAYERS_NEEDED + '</td>';
+	        $trHtml += '<td class="game-state">' + game.stateString + '</td>';
+	        $trHtml += '<td class="game-view""><a href="/secure/game/' + game.id + '" class="btn btn-success btn-sm">Register</a></td>';
 	        $trHtml += '</tr>';
 	        $("#game-" + game.replacedGameId ).after($trHtml);
 	        flashGameRow(game);
 	    }
 	    
 	    function refreshGameRow(game){
-	    	$("#game-" + game.id ).find('td.game-name').text(game.name);
-	    	$("#game-" + game.id ).find('td.game-player-count').text(game.noPlayers);
-	    	$("#game-" + game.id ).find('td.game-state').text(game.state);
+	    	if(game.state == FINISHED_GAME){
+	    		$("#game-" + game.id ).find('td.game-name').html('<span class="finished-game-icon"></span>&nbsp;&nbsp;' + game.name);
+	    		$("#game-" + game.id ).find('td.game-view').html('<a href="/secure/game/' + game.id + '" class="btn btn-warning btn-sm">Results</a>');
+	    	}else{
+	    		$("#game-" + game.id ).find('td.game-name').html('<span class="live-game-icon"></span>&nbsp;&nbsp;' + game.name);
+	    	}
+	    	$("#game-" + game.id ).find('td.game-player-count').text(game.noPlayers + ' / {{ constant('AppBundle\\Entity\\Game::PLAYERS_NEEDED') }}');
+	    	$("#game-" + game.id ).find('td.game-state').text(game.stateString);
 	    	flashGameRow(game);
 	    }
 	    
 	    function flashGameRow(game){
-	    	$("#game-" + game.id).animate({
-				color: "#8bed7e"
-			}, 1500).animate({
-				color: "#000"
-			}, 1500);
+	    	$("#game-" + game.id).find('td.game-player-count').animate({
+				color: "#68B855"
+			}, 1000).animate({
+				color: "#005c9c"
+			}, 1000);
+			
+			$("#game-" + game.id).find('td.game-state').animate({
+				color: "#68B855"
+			}, 1000).animate({
+				color: "#005c9c"
+			}, 1000);
 	    }
 	    
 	    function showMyGame(game){

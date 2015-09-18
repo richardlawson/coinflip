@@ -24,6 +24,10 @@ class Game{
 	// we have enough players to play game
 	const STATE_READY_TO_PLAY = 2;
 	const STATE_FINISHED = 3;
+	const STATE_INITIALIZED_STRING = 'ready';
+	const STATE_HAS_PLAYERS_BUT_NOT_READY_STRING = 'has player';
+	const STATE_READY_TO_PLAY_STRING = 'ready';
+	const STATE_FINISHED_STRING = 'finished';
 
 	protected static $flipTypes = [self::FLIP_TYPE_HEADS,self::FLIP_TYPE_TAILS];
 	
@@ -367,6 +371,31 @@ class Game{
     public function getGameState()
     {
         return $this->gameState;
+    }
+    
+    /**
+     * Get gameState as string
+     *
+     * @return string
+     */
+    public function getGameStateString()
+    {
+    	$gameStateString = '';
+    	switch($this->gameState){
+    		case self::STATE_INITIALIZED:
+    			$gameStateString = self::STATE_INITIALIZED_STRING;
+    			break;
+    		case self::STATE_HAS_PLAYERS_BUT_NOT_READY:
+    			$gameStateString = self::STATE_HAS_PLAYERS_BUT_NOT_READY_STRING;
+    			break;
+    		case self::STATE_READY_TO_PLAY:
+    			$gameStateString = self::STATE_READY_TO_PLAY_STRING;
+    			break;
+    		case self::STATE_FINISHED:
+    			$gameStateString = self::STATE_FINISHED_STRING;
+    			break;
+    	}
+    	return $gameStateString;
     }
 
     /**

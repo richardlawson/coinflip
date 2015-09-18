@@ -9,8 +9,8 @@ class HeadsFlipType extends AbstractType
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder
-		->add('flipType', 'integer')
-    	->add('heads', 'submit')
+		->add('flipType', 'hidden')
+    	->add('heads', 'submit', array('attr' => array('class' => 'btn btn-primary')))
 		;
 	}
 

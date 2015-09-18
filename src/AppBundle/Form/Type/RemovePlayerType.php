@@ -9,7 +9,7 @@ class RemovePlayerType extends AbstractType
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder
-		->add('leave game', 'submit')
+		->add('leave game', 'submit', array('attr' => array('class' => 'btn btn-warning')))
 		;
 	}
 

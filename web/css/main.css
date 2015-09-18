@@ -1,0 +1,104 @@
+body{
+	font-family: Arial, Helvetica, sans-serif;
+	padding: 0;
+	margin: 0;
+	color: #393939;
+}
+
+h1, h2{
+	color: #999;
+	font-family: 'Questrial', Arial, Helvetica, sans-serif;
+}
+
+.float-fix{
+	clear:both;
+}
+
+a{ 
+	color: #393939;
+	text-decoration: none;
+}
+
+a:hover{
+	
+}
+
+.flash-notice{
+	color: #0a5ae5;
+}
+
+.pagewrap {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0;
+}
+
+#page-header {
+    width: 100%;
+    background: #242424;
+    float: left;
+    border-bottom: 1px solid #fff;
+}
+
+#page-header h1{
+	float: left;
+	font-size: 35px;
+	color: #fff;
+	font-family: 'Marck Script', Arial, Helvetica, sans-serif;
+	margin: 15px 10px;
+}
+
+#main-nav{
+	float: right;
+    display: block;
+    color: #fff;
+    margin: 25px 10px;
+}
+
+#main-nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#main-nav li {
+    display: inline-block;
+    padding: 0 15px 0 7px;
+    background: url(/images/dash.png) no-repeat right center;
+}
+
+#main-nav li:last-child {
+	padding: 0px 0 0 7px;
+	background: none;
+}
+
+#main-nav li a{
+	color: #fff;
+}
+
+div#game-header{
+	background-color: #eee;
+	float: left;
+	width: 100%;
+	padding: 10px 10px 0px 10px;
+	border-bottom: 1px solid #ccc;
+}
+
+section#game-layout{
+	float: left;
+	width: 100%;
+}
+
+section#game-view{
+	max-width: 500px;
+	margin: 10px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	clear: both;
+	padding: 10px;
+}
+
+section#back{
+	padding: 0 10px;
+}
+
