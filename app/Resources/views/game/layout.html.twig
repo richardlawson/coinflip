@@ -5,7 +5,7 @@
 		<h1>FlipShark</h1>
 		<nav id="main-nav">
 			<ul>
-				<li>{{ app.user.username }}&nbsp;<span class="glyphicon glyphicon-user"></span></li>
+				<li><a href="{{ path('fos_user_profile_edit') }}">{{ app.user.username }}</a>&nbsp;<span class="glyphicon glyphicon-user"></span></li>
 				<li><a href="{{ path('fos_user_security_logout') }}">Logout <span class="glyphicon glyphicon-log-out"></span></a></li>
 			</ul>
 		</nav>

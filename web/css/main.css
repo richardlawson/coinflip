@@ -78,7 +78,7 @@ a:hover{
 	color: #fff;
 }
 
-div#game-header{
+div#game-header, div#view-header{
 	background-color: #eee;
 	float: left;
 	width: 100%;
@@ -91,7 +91,7 @@ section#game-layout{
 	width: 100%;
 }
 
-section#game-view{
+section#game-view, section#view-section{
 	max-width: 500px;
 	margin: 10px;
 	border: 1px solid #ccc;
@@ -102,5 +102,14 @@ section#game-view{
 
 section#back{
 	padding: 0 10px;
+}
+
+
+div.form-wrapper{
+	background-color: #eee;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	clear: both;
+	padding: 10px;
 }
 

@@ -28,3 +28,8 @@ services:
         class: AppBundle\Form\Type\ProfileType
         tags:
             - { name: form.type, alias: app_user_profile }
+    app.profile_edit:
+        class: AppBundle\EventListener\ProfileListener
+        arguments: [ @router, @session ]
+        tags:
+            - { name: kernel.event_subscriber }
