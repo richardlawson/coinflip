@@ -48,6 +48,7 @@
 {% block javascripts %}
  	 {{ parent() }}
 	 <script src="http://autobahn.s3.amazonaws.com/js/autobahn.min.js"></script>
+	 <script src="{{ asset('js/game-play-popup.js') }}"></script>
 	 <script>
 	    var FINISHED_GAME = {{ constant('AppBundle\\Entity\\Game::STATE_FINISHED') }};
 	 	var currentGame = {{ game.id }};
@@ -55,19 +56,21 @@
 	 	{% for game in liveGames %}	
 	 		liveGames.push({{game.id}});
 	 	{% endfor %}
+	 	var gamePlayPopup = new GamePlayPopup(liveGames, FINISHED_GAME);
 	 	
 	    var conn = new ab.Session('ws://localhost:8080',
 	        function() {
 	            conn.subscribe('games', function(topic, data) {
 	            	// our json is actually a json string, so make it a json object
 	            	var game = jQuery.parseJSON(data);
-	                showMyGame(game);
 	                if(currentGame == game.id && game.state != FINISHED_GAME){
 	                	refreshPage();
 	                }else if(currentGame == game.id){
 	                	refreshViewForFinishedGame(game)
 	                }
-	               
+	                if(gamePlayPopup.isMyFinishedGame(game)){
+	                	gamePlayPopup.showMyGame(game);
+	                }
 	            });
 	        },
 	        function() {
@@ -75,12 +78,6 @@
 	        },
 	        {'skipSubprotocolCheck': true}
 	    );
-	    
-	    function showMyGame(game){
-	    	if(game.state == FINISHED_GAME && $.inArray(game.id, liveGames) !== -1){
-	    		window.open('/secure/game-play/' + game.id);
-	    	}
-	    }
 	    
 	    function refreshViewForFinishedGame(game){
 	    	$('#pick-text').hide();

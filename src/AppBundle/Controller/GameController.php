@@ -64,6 +64,14 @@ class GameController extends Controller
 	    $response->headers->addCacheControlDirective('no-store', true);
     }
     
+    public function userLiveGamesAction(){
+    	$em = $this->getDoctrine()->getManager();
+    	$liveGames = $em->getRepository('AppBundle:Game')->getUserLiveGames($this->getUser());
+    	return $this->render('game/user_live_games.html.twig', array(
+    		'liveGames' => $liveGames,
+    	));
+    }
+    
     /**
      * @Route("/secure/game/{id}", requirements={"id" = "\d+"}, name="game_view")
      */
@@ -161,7 +169,7 @@ class GameController extends Controller
 	 /**
      * @Route("/secure/game-play/{id}", requirements={"id" = "\d+"}, name="game_play")
      */
-    public function playAction(Game $game)
+    public function playAction(Game $game, Request $request)
     {
     	$em = $this->getDoctrine()->getManager();
     	$user = $this->getUser();
@@ -174,7 +182,13 @@ class GameController extends Controller
     	$player->setViewedGame(true);
     	$em->flush();
     	
-    	return $this->render('game/play.html.twig', array(
+    	$template = 'game/play.html.twig';
+    	$isPopup = $request->query->get('popup', false);
+    	if($isPopup){
+    		$template = 'game/play_popup.html.twig';
+    	}
+    	
+    	return $this->render($template, array(
     		'game' => $game,
     	));
     }

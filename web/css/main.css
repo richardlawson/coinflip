@@ -23,6 +23,8 @@ a:hover{
 	
 }
 
+.ui-button:focus { outline:none !important }
+
 .flash-notice{
 	color: #0a5ae5;
 }

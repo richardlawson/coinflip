@@ -1,0 +1,26 @@
+<script src="http://autobahn.s3.amazonaws.com/js/autobahn.min.js"></script>
+<script src="{{ asset('js/game-play-popup.js') }}"></script>
+<script>
+	var FINISHED_GAME = {{ constant('AppBundle\\Entity\\Game::STATE_FINISHED') }};
+	var liveGames = [];
+	{% for game in liveGames %}	
+		liveGames.push({{game.id}});
+	{% endfor %}
+	var gamePlayPopup = new GamePlayPopup(liveGames, FINISHED_GAME);
+	
+	var conn = new ab.Session('ws://localhost:8080',
+		function() {
+	    	conn.subscribe('games', function(topic, data) {
+	        	// our json is actually a json string, so make it a json object
+	            var game = jQuery.parseJSON(data);
+	            if(gamePlayPopup.isMyFinishedGame(game)){
+	            	gamePlayPopup.showMyGame(game);
+	            }
+	        });
+	     },
+	     function() {
+	     	console.warn('WebSocket connection closed');
+	     },
+	     {'skipSubprotocolCheck': true}
+	);
+</script>

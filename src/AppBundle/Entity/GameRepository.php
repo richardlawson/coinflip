@@ -52,8 +52,11 @@ class GameRepository extends EntityRepository
 		$query = $this->getEntityManager()->createQuery('SELECT g.name FROM AppBundle:Game g WHERE (g.gameState !=:state) OR (g.gameState = :state AND g.finishedAt > :expiryDate)');
 		$query->setParameter('state', Game::STATE_FINISHED);
 		$query->setParameter('expiryDate', new \DateTime('-2 minutes'));
-		$result = $query->getResult();
-		return $result;
+		$result = $query->getScalarResult();
+		// doctrine returns an array of arrays. Each name is wrapped in it's own array. We want a single array with names/strings as array elements
+		// use array_map to convert our array of arrays to a single array
+		$names = array_map('current', $result);
+		return $names;
 	}
 	
 	public function isNameInUse($name)

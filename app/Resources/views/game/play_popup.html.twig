@@ -1,10 +1,6 @@
-{% extends 'game/layout.html.twig' %}
+{% extends 'base.html.twig' %}
 
-{% block content %}
-	<div id="game-header">
-		<h1>{{game.name}}</h1>
-	</div>
-	<br class="float-fix">
+{% block body %}
 	<section id="game-view">
 		{% if game.players|length > 0 %}
 				<table class="game-table game-view">
@@ -30,14 +26,11 @@
 			{{ game.winner.user.username }} with {{ game.winner.flipTypeAsString }} 
 		</div>
 	</section>
-	<section id="back">
-		<p><a href="{{ path('game_home')}}" class="btn btn-default">Back to games</a></p>
-	</section>
 {% endblock %}
 
 {% block javascripts %}
 	{{ parent() }}
-	<script src="{{ asset('js/game-animation.js') }}"></script>
+ 	<script src="{{ asset('js/game-animation.js') }}"></script>
  	<script>
  		$(document).ready(function(){ 
 	 		{% if game.winner.flipType == constant('FLIP_TYPE_HEADS', game) %};
@@ -48,9 +41,6 @@
 			coinAnimation.init();
 		});
 	</script>
-	{{ render(controller(
-        'AppBundle:Game:userLiveGames'
-    )) }}
 {% endblock %}
 
 

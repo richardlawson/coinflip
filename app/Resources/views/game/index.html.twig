@@ -39,6 +39,7 @@
 {% block javascripts %}
  	 {{ parent() }}
 	 <script src="http://autobahn.s3.amazonaws.com/js/autobahn.min.js"></script>
+	 <script src="{{ asset('js/game-play-popup.js') }}"></script>
 	 <script>
 	 	var FINISHED_GAME = {{ constant('AppBundle\\Entity\\Game::STATE_FINISHED') }};
 	 	var INITIALIZED_GAME = {{ constant('AppBundle\\Entity\\Game::STATE_INITIALIZED') }};
@@ -47,6 +48,7 @@
 	 	{% for game in liveGames %}	
 	 		liveGames.push({{game.id}});
 	 	{% endfor %}
+	 	var gamePlayPopup = new GamePlayPopup(liveGames, FINISHED_GAME);
 	 	
 	    var conn = new ab.Session('ws://localhost:8080',
 	        function() {
@@ -58,7 +60,9 @@
 	                }else{
 	                	refreshGameRow(game);
 	                }
-	                showMyGame(game);
+	                if(gamePlayPopup.isMyFinishedGame(game)){
+	                	gamePlayPopup.showMyGame(game);
+	                }
 	            });
 	        },
 	        function() {
@@ -110,12 +114,6 @@
 			}, 1000).animate({
 				color: "#005c9c"
 			}, 1000);
-	    }
-	    
-	    function showMyGame(game){
-	    	if(game.state == FINISHED_GAME && $.inArray(game.id, liveGames) !== -1){
-	    		window.open('/secure/game-play/' + game.id);
-	    	}
 	    }
 	</script>
 	<script>
