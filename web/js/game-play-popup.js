@@ -27,7 +27,7 @@ function GamePlayPopup(games, finishedGameCode){
 			autoOpen: true,
 			modal: false,
 			width: dialogWidth,
-			height: 500,
+			height: 650,
 		    position: { my: myPos, at: "left top"}
 		});
 		this.noDialogs++;

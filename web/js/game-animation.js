@@ -1,6 +1,6 @@
-function CoinAnimation(headsWins){
-	
+function CoinAnimation(headsWins, winnerId){
 	this.headsWins = headsWins;
+	this.winnerId = winnerId;
 	this.tid;
 	this.count = 0;
 	this.maxFlips = 10;
@@ -30,7 +30,9 @@ function CoinAnimation(headsWins){
 			$("#coin-heads").hide();
 			$("#coin-tails").show();
 		}
-		$("#progress-bar").text('Game Finished');;
+		$("#progress-bar").text('Game Finished');
 		$("#winner-panel").show();
+		var winnerStar = $(".star-" + this.winnerId);
+		winnerStar.attr("src", '/images/star_on.png');
 	}
 }

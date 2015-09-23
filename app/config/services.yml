@@ -33,3 +33,8 @@ services:
         arguments: [ @router, @session ]
         tags:
             - { name: kernel.event_subscriber }
+    app.password_update:
+        class: AppBundle\EventListener\PasswordListener
+        arguments: [ @router, @session ]
+        tags:
+            - { name: kernel.event_subscriber }

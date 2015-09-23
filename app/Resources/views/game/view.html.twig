@@ -19,13 +19,25 @@
 			</tr>
 			{% for player in game.players %}
 				<tr>
-					<td>{{ player.user.username }}</td> 
-					<td class="flip-type">{{ player.getFlipTypeAsString }}</td>
+					<td>
+						{% if gameFinished %}
+							{% if game.winner.user.id == player.user.id %}
+								<img src="{{ asset('images/star_on.png') }}" class="star"  />&nbsp;
+							{% else %}
+								<img src="{{ asset('images/star_off.png') }}" class="star" />&nbsp;
+							{% endif %}
+						{% endif %}
+						{{ player.user.username }}
+					</td> 
+					<td class="flip-type">
+						{{ player.getFlipTypeAsString }}
+					</td>
 				</tr>
 			{% endfor %}
 			</table>
 		{% endif %}
 		{% if gameFinished %}
+			<img id="stars" class="responsive-image" src="{{ asset('images/stars.jpg') }}"  />
 			<h2>The winner was {{ game.winner.user.username }} with {{ game.winner.flipTypeAsString }}</h2>
 		{% else %}
 			{% if not userInGame %}

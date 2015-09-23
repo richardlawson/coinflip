@@ -10,7 +10,7 @@
 				</tr>
 				{% for player in game.players %}
 					<tr>
-						<td>{{ player.user.username }}</td> 
+						<td><img src="{{ asset('images/star_off.png') }}" class="star star-{{player.user.id}}"  />&nbsp;{{ player.user.username }}</td> 
 						<td class="flip-type">{{ player.getFlipTypeAsString }}</td>
 					</tr>
 				{% endfor %}
@@ -18,10 +18,11 @@
 		{% endif %}
 		<h2 id="progress-bar">Game in progress:</h2>
 		<div id="animation">
-			<p id="coin-heads">HEADS</p>
-			<p id="coin-tails">TAILS</p>
+			<p id="coin-heads"><img src="{{ asset('images/heads.jpg') }}" alt="heads"></p>
+			<p id="coin-tails"><img src="{{ asset('images/tails.jpg') }}" alt="tails"></p>
 		<div>
 		<div id="winner-panel" style="display:none">
+			<img id="stars" class="responsive-image" src="{{ asset('images/stars.jpg') }}"  />
 			<h2>Winner:</h2>
 			{{ game.winner.user.username }} with {{ game.winner.flipTypeAsString }} 
 		</div>
@@ -34,9 +35,9 @@
  	<script>
  		$(document).ready(function(){ 
 	 		{% if game.winner.flipType == constant('FLIP_TYPE_HEADS', game) %};
-				 var coinAnimation = new CoinAnimation(true);
+				 var coinAnimation = new CoinAnimation(true, {{ game.winner.user.id }});
 			{% else %}
-				var coinAnimation = new CoinAnimation(false);
+				var coinAnimation = new CoinAnimation(false, {{ game.winner.user.id }});
 			{% endif %}
 			coinAnimation.init();
 		});

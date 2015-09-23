@@ -23,6 +23,10 @@ a:hover{
 	
 }
 
+img.responsive-image{
+	max-width: 100%;
+}
+
 .ui-button:focus { outline:none !important }
 
 .flash-notice{
@@ -40,6 +44,7 @@ a:hover{
     background: #242424;
     float: left;
     border-bottom: 1px solid #fff;
+    height: 70px;
 }
 
 #page-header h1{
@@ -54,28 +59,33 @@ a:hover{
 	float: right;
     display: block;
     color: #fff;
-    margin: 25px 10px;
 }
 
-#main-nav ul {
+#main-nav > ul {
     margin: 0;
     padding: 0;
     list-style: none;
 }
 
-#main-nav li {
-    display: inline-block;
-    padding: 0 15px 0 7px;
-    background: url(/images/dash.png) no-repeat right center;
+#main-nav > ul > li {
+    float: left;
+    padding: 0;
+    margin: 0;
 }
 
-#main-nav li:last-child {
-	padding: 0px 0 0 7px;
-	background: none;
-}
-
-#main-nav li a{
+#main-nav > ul > li > a{
+	background: url(/images/dash.png) no-repeat right center;
 	color: #fff;
+	height: 70px;
+	line-height: 70px;
+	padding: 0 15px;
+	display: block;
+	text-decoration: none;	
+}
+
+#main-nav > ul > li:last-child > a{
+	padding: 0 15px;
+	background: none;
 }
 
 div#game-header, div#view-header{
@@ -100,16 +110,30 @@ section#game-view, section#view-section{
 	padding: 10px;
 }
 
-section#back{
-	padding: 0 10px;
-}
-
-
 div.form-wrapper{
 	background-color: #eee;
 	border: 1px solid #ccc;
 	border-radius: 5px;
 	clear: both;
 	padding: 10px;
+}
+
+div#winner-panel{
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	clear: both;
+	padding: 10px;
+}
+
+img.star{
+	vertical-align: top;
+}
+
+img#stars{
+	width: 70%;
+}
+
+section#back{
+	padding: 0 10px;
 }
 

@@ -5,7 +5,21 @@
 		<h1>FlipShark</h1>
 		<nav id="main-nav">
 			<ul>
-				<li><a href="{{ path('fos_user_profile_edit') }}">{{ app.user.username }}</a>&nbsp;<span class="glyphicon glyphicon-user"></span></li>
+				<li class="popup-container">
+					<a href="{{ path('fos_user_profile_edit') }}" id="show-user-panel">{{ app.user.username }}&nbsp;<span class="glyphicon glyphicon-user"></span></a>
+					<div id="user-panel" class="drop-panel">
+						<nav class="drop-nav">
+							<ul>
+								<li>
+									<a href="{{ path('fos_user_profile_edit') }}">Edit Profile</a>
+								</li>
+								<li>
+									<a href="{{ path('fos_user_change_password') }}">Change Password</a>
+								</li>
+							</ul>
+						</nav>
+					</div>
+				</li>
 				<li><a href="{{ path('fos_user_security_logout') }}">Logout <span class="glyphicon glyphicon-log-out"></span></a></li>
 			</ul>
 		</nav>
@@ -13,7 +27,14 @@
     {% block content %}{% endblock %}
     <div id="modal"></div>
 {% endblock %}
-
 {% block javascripts %}
 	{{ parent() }}
+	<script>
+		$(function(){
+			$("#show-user-panel").click(function(event){
+				event.preventDefault();
+				$("#user-panel").toggle();	
+			})
+		});
+	</script>
 {% endblock %}
