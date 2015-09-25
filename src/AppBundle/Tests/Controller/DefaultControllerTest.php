@@ -12,7 +12,7 @@ class DefaultControllerTest extends WebTestCase
         $this->client = static::createClient();
         $crawler = $this->client->request('GET', '/');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertContains('Coin Flip', $crawler->filter('h1')->text());
+        $this->assertContains('FlipShark', $crawler->filter('h1')->text());
     }
     
     public function testThatLoggedInUserGetsRedirectedToGamesHomeWhenTheyVisitIndex()

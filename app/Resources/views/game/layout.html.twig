@@ -29,6 +29,8 @@
 {% endblock %}
 {% block javascripts %}
 	{{ parent() }}
+	<script src="http://autobahn.s3.amazonaws.com/js/autobahn.min.js"></script>
+	<script src="{{ asset('js/game-play-popup.js') }}"></script>
 	<script>
 		$(function(){
 			$("#show-user-panel").click(function(event){
@@ -37,4 +39,7 @@
 			})
 		});
 	</script>
+	{{ render(controller(
+        'AppBundle:Game:userUnviewedGames'
+    )) }}
 {% endblock %}

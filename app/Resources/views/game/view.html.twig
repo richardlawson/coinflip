@@ -59,8 +59,6 @@
 {% endblock %}
 {% block javascripts %}
  	 {{ parent() }}
-	 <script src="http://autobahn.s3.amazonaws.com/js/autobahn.min.js"></script>
-	 <script src="{{ asset('js/game-play-popup.js') }}"></script>
 	 <script>
 	    var FINISHED_GAME = {{ constant('AppBundle\\Entity\\Game::STATE_FINISHED') }};
 	 	var currentGame = {{ game.id }};

@@ -1,0 +1,134 @@
+#page-header-outer {
+    width: 100%;
+    background: #242424;
+    height: 70px;
+}
+
+#page-header-outer h1{
+	float: left;
+	font-size: 35px;
+	color: #fff;
+	font-family: 'Marck Script', Arial, Helvetica, sans-serif;
+	margin: 15px 10px;
+}
+
+#home-content{
+	background: url(../images/shark.jpg);
+	background-repeat: no-repeat;
+    background-size: cover;
+    padding-bottom: 75px;
+}
+
+nav#login{
+	float: right;
+}
+
+nav#login a{
+	border-radius: 5px;
+	padding: 10px 20px;
+	font-size:15px;
+	color: #fff;
+	margin-top: 15px;
+	display: block;
+	font-weight: 100;
+	border: 1px solid #fff;
+	text-decoration:none;
+}
+
+nav#login a:hover{
+	background: #333;
+}
+
+div#join-panel{
+	text-align: center;
+	padding-top: 50px;
+}
+
+div#join-panel h1{
+	color: #fff;
+	font-size: 50px;
+	font-weight: 100px;
+	margin-bottom: 20px;
+}
+
+div#join-panel h2{
+	color: #fff;
+	font-size: 35px;
+	text-shadow: 1px 2px #333;
+}
+
+
+div#join-panel p{
+	font-size: 21px;
+	color: #fff;
+	font-weight: 100;
+	font-family: 'Questrial', Arial, Helvetica, sans-serif;
+	margin-bottom:40px;
+}
+
+a.join{
+	background: #FD8111;
+	border-radius: 5px;
+	padding: 15px 50px;
+	font-size:18px;
+	color: #fff;
+	border: 1px solid #666;
+	text-decoration:none;
+}
+
+a.join:hover{
+	background: #FF9900;
+}
+
+#features{
+	width: 70%;
+	margin: 0 auto;
+	padding-top: 140px;
+}
+
+#features p{
+	text-shadow: 1px 2px #333;
+}
+
+#features-inner-wrapper{
+	float: left;
+	width: 100%;	
+}
+
+div.feature{
+	width: 30%;
+	margin-right: 5%;
+	float: left;
+}
+
+#features div.feature:last-child{
+	margin-right: 0;
+	width: 30%;
+} 
+
+.circle{
+	width: 140px;
+	height: 140px;
+	background: #90CEBB;
+	border-radius: 50%;
+	text-align: center;
+    margin: 0px auto 0px auto;
+}
+
+@media all and (max-width: 768px) {
+	#features{
+		width: 100%;
+	}
+}
+
+@media all and (max-width: 600px) {
+	div.feature{
+		width: 100%;
+		margin-right: 0;
+	}
+	
+	#features div.feature:last-child{
+		width: 100%;
+	} 
+
+}

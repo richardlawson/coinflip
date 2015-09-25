@@ -72,6 +72,14 @@ class GameController extends Controller
     	));
     }
     
+    public function userUnviewedGamesAction(){
+    	$em = $this->getDoctrine()->getManager();
+    	$unviewedGames = $em->getRepository('AppBundle:Game')->getFinishedGamesThatUserHasNotViewed($this->getUser());
+    	return $this->render('game/user_unviewed_games.html.twig', array(
+    		'unviewedGames' => $unviewedGames,
+    	));
+    }
+    
     /**
      * @Route("/secure/game/{id}", requirements={"id" = "\d+"}, name="game_view")
      */

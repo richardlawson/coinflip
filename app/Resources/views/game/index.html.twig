@@ -38,8 +38,6 @@
 {% endblock %}
 {% block javascripts %}
  	 {{ parent() }}
-	 <script src="http://autobahn.s3.amazonaws.com/js/autobahn.min.js"></script>
-	 <script src="{{ asset('js/game-play-popup.js') }}"></script>
 	 <script>
 	 	var FINISHED_GAME = {{ constant('AppBundle\\Entity\\Game::STATE_FINISHED') }};
 	 	var INITIALIZED_GAME = {{ constant('AppBundle\\Entity\\Game::STATE_INITIALIZED') }};
@@ -115,11 +113,6 @@
 				color: "#005c9c"
 			}, 1000);
 	    }
-	</script>
-	<script>
- 		{% for game in unviewedGames %}	
- 	 		window.open('{{ path('game_play', { id: game.id }) }}');
- 	 	{% endfor %}
 	</script>	
 {% endblock %}
 

@@ -16,6 +16,11 @@ function GamePlayPopup(games, finishedGameCode){
 	    }
 	}
 	
+	this.showFinishedGame = function(id, name){
+		var game = {id: id, name: name};
+		this.showMyGame(game);
+	}
+	
 	this.showMyGame = function(game){
     	var dialogHtml = '<div id="dialog-' + game.id + '"><iframe width="100%" height="100%" frameBorder="0" src="/secure/game-play/' + game.id + '?popup=true"></iframe></div>';
     	$('body').append(dialogHtml);

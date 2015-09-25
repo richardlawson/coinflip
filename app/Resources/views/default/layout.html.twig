@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<header id="page-header-outer">
+		<div class="pagewrap">
+			<h1>FlipShark</h1>
+			<nav id="login">
+				<a href="{{ path('fos_user_security_login') }}">Login</a>
+			</nav>
+		</div>
+	</header>
+    {% block content %}{% endblock %}
+    <div id="modal"></div>
+{% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+{% endblock %}

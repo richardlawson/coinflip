@@ -6,4 +6,10 @@
         {% endblock fos_user_content %}
     </div>
 {% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+	{{ render(controller(
+        'AppBundle:Game:userLiveGames'
+    )) }}
+{% endblock %}
 

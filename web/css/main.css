@@ -34,7 +34,7 @@ img.responsive-image{
 }
 
 .pagewrap {
-    max-width: 1400px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 0;
 }
@@ -83,9 +83,19 @@ img.responsive-image{
 	text-decoration: none;	
 }
 
+#main-nav > ul > li > a:hover{
+	background-color: #333;
+	border-bottom: 1px solid #fff;
+}
+
 #main-nav > ul > li:last-child > a{
 	padding: 0 15px;
 	background: none;
+}
+
+#main-nav > ul > li:last-child > a:hover{
+	background-color: #333;
+	border-bottom: 1px solid #fff;
 }
 
 div#game-header, div#view-header{

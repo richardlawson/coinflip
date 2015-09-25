@@ -1,0 +1,11 @@
+<script>
+	var FINISHED_GAME = {{ constant('AppBundle\\Entity\\Game::STATE_FINISHED') }};
+	var unviewedGames = [];
+	{% for game in unviewedGames %}	
+ 		unviewedGames.push({{game.id}});	
+ 	{% endfor %}
+ 	var finishedGamePlayPopup = new GamePlayPopup(unviewedGames, FINISHED_GAME);
+	{% for game in unviewedGames %}	
+ 		finishedGamePlayPopup.showFinishedGame({{game.id}},'{{game.name}}');	
+ 	{% endfor %}
+</script>

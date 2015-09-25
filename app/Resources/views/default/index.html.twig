@@ -1,7 +1,39 @@
-{% extends 'base.html.twig' %}
+{% extends 'default/layout.html.twig' %}
 
-{% block body %}
-    <h1>Coin Flip</h1>
-    <p><a href="{{ path('fos_user_security_login') }}">Login</a></p>
-    <p><a href="{{ path('fos_user_registration_register') }}">Join</a></p>
+{% block content %}
+	<section id="home-content">
+		<div class="pagewrap">
+	    	<div id="join-panel">
+	    		<h1>The home of heads or tails</h1>
+	    		<p>FlipShark is the new multiplayer coin flip game</p>
+	    		<a href="{{ path('fos_user_registration_register') }}" class="join">Join Now</a>
+	    		<div id="features">
+	    			<div id="features-inner-wrapper">
+		    			<div class="feature">
+		    				<div class="circle">
+		    					<img src="{{ asset('images/icons/multiplayer.png') }}" alt="multiplayer">
+		    				</div>
+		    				<h2>Multiplayer</h2>
+		    				<p>Play against other real players</p>
+		    			</div>
+		    			<div class="feature">
+		    				<div class="circle">
+		    					<img src="{{ asset('images/icons/coins.png') }}" alt="coins">
+		    				</div>
+		    				<h2>Free Play</h2>
+		    				<p>At the moment, FlipShark is a free only for fun game</p>
+		    			</div>
+		    			<div class="feature last">
+		    				<div class="circle">
+		    					<img src="{{ asset('images/icons/download.png') }}" alt="no downloads">
+		    				</div>
+		    				<h2>No Downloads</h2>
+		    				<p>You don't need to download software to play</p>
+		    			</div>
+		    		</div>
+		    		<br class="float-fix">
+	    		</div>
+	    	</div>
+	    </div>
+    </section>
 {% endblock %}
