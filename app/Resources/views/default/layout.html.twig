@@ -10,7 +10,11 @@
 		</div>
 	</header>
     {% block content %}{% endblock %}
-    <div id="modal"></div>
+    <footer id="page-footer">
+   		<div class="pagewrap">
+    		<p>FlipShark ©{{ 'now'|date('Y') }}</p>
+    	</div>
+    </footer>
 {% endblock %}
 {% block javascripts %}
 	{{ parent() }}

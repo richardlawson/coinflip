@@ -38,3 +38,8 @@ services:
         arguments: [ @router, @session ]
         tags:
             - { name: kernel.event_subscriber }
+    app.registration_success:
+        class: AppBundle\EventListener\RegistrationListener
+        arguments: [ @router]
+        tags:
+            - { name: kernel.event_subscriber }

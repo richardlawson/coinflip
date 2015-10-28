@@ -1,6 +1,10 @@
-{% extends "FOSUserBundle::layout.html.twig" %}
+{% extends "FOSUserBundle::layout-external.html.twig" %}
 {% form_theme form 'bootstrap_3_layout.html.twig' %}
 
 {% block fos_user_content %}
-{% include "FOSUserBundle:Registration:register_content.html.twig" %}
+	<section id="view-section">
+		<div class="form-wrapper">
+			{% include "FOSUserBundle:Registration:register_content.html.twig" %}
+		</div>
+	</section>
 {% endblock fos_user_content %}

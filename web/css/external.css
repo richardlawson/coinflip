@@ -12,11 +12,23 @@
 	margin: 15px 10px;
 }
 
+
+#page-footer{
+	width: 100%;
+	background: #242424;
+	min-height: 100px;
+	color: #888;
+	font-weight: 100;
+	font-size: 12px;
+	padding-top: 20px;
+	margin-top: 50px;
+}
+
 #home-content{
 	background: url(../images/shark.jpg);
 	background-repeat: no-repeat;
     background-size: cover;
-    padding-bottom: 75px;
+    padding-bottom: 50px;
 }
 
 nav#login{
@@ -39,6 +51,40 @@ nav#login a:hover{
 	background: #333;
 }
 
+
+#bg {
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  /* Preserve aspet ratio */
+  min-width: 100%;
+  min-height: 100%;
+}
+
+#page-login-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: url(../images/login_back.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.pagewrap-login {
+    max-width: 500px;
+    margin: 100px auto 0 auto;
+}
+
+.pagewrap-login h1{
+	font-size: 50px;
+	color: #fff;
+	font-family: 'Marck Script', Arial, Helvetica, sans-serif;
+	margin: 15px 10px;
+	text-align: center;
+}
+
 div#join-panel{
 	text-align: center;
 	padding-top: 50px;
@@ -49,6 +95,7 @@ div#join-panel h1{
 	font-size: 50px;
 	font-weight: 100px;
 	margin-bottom: 20px;
+	-webkit-font-smoothing: antialiased;
 }
 
 div#join-panel h2{
@@ -64,6 +111,7 @@ div#join-panel p{
 	font-weight: 100;
 	font-family: 'Questrial', Arial, Helvetica, sans-serif;
 	margin-bottom:40px;
+	-webkit-font-smoothing: antialiased;
 }
 
 a.join{
@@ -115,9 +163,72 @@ div.feature{
     margin: 0px auto 0px auto;
 }
 
+#home-instructions{
+	margin-top: 50px;	
+	font-weight: 100;
+	width: 100%;
+}
+
+#home-instructions p, #home-about p{
+	font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+	font-size: 16px;
+}
+
+#home-instructions h1, #home-about h1{
+	text-align: center;
+	color: #444;
+	font-family: 'Questrial', Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: 100;
+     -webkit-font-smoothing: antialiased;
+}
+
+#instructions{
+	float: left;
+	width: 100%;
+	background: #efefef;
+}
+
+#instructions div.instruction-cell{
+	width: 33.333%;
+	float: left;
+}
+
+#instructions div.instruction-cell-text{
+	padding: 20px 7.5%;
+	  -webkit-font-smoothing: antialiased;
+}
+
+div.instruction-cell div.content-wrapper{
+	float: left;
+	width: 100%;	
+}
+
+div.instruction-cell div.num{
+	font-size: 30px;
+	color: #666;
+	padding-right: 10px;
+	float: left;
+	margin-right: 10px;
+}
+
+div.instruction-cell img{
+	width: 100%;
+}
+
+#home-about{
+	text-align: center;
+	margin-top: 50px;	
+}
+
 @media all and (max-width: 768px) {
 	#features{
 		width: 100%;
+	}
+	
+	#instructions div.instruction-cell{
+		width: 100%;
+		float: left;
 	}
 }
 
