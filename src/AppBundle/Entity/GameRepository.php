@@ -26,6 +26,15 @@ class GameRepository extends EntityRepository
 		return $result;
 	}
 	
+	public function getUserFinishedGames(User $user)
+	{
+		$query = $this->getEntityManager()->createQuery('SELECT g FROM AppBundle:Game g JOIN g.players p JOIN p.user u WHERE u.id =:userId AND g.gameState =:state');
+		$query->setParameter('userId', $user->getId());
+		$query->setParameter('state', Game::STATE_FINISHED);
+		$result = $query->getResult();
+		return $result;
+	}
+	
 	public function removeUserFromGame(User $user, Game $game)
 	{
 		if($game->isUserInGame($user)){

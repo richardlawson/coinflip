@@ -29,7 +29,7 @@
 {% endblock %}
 {% block javascripts %}
 	{{ parent() }}
-	<script src="http://autobahn.s3.amazonaws.com/js/autobahn.min.js"></script>
+	<script src="{{ asset('js/autobahn.min.js') }}"></script>
 	<script src="{{ asset('js/game-play-popup.js') }}"></script>
 	<script>
 		$(function(){
